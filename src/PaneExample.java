@@ -3,8 +3,6 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 
 import java.util.HashMap;
@@ -17,9 +15,15 @@ public class PaneExample extends Application {
         pane.setPrefSize(600, 500);
 
         Ship ship = new Ship(150, 100);
-
+        Asteroid asteroid = new Asteroid(50, 50);
 
         pane.getChildren().add(ship.getCharacter());
+        pane.getChildren().add(asteroid.getCharacter());
+
+        asteroid.turnRight();
+        asteroid.turnRight();
+        asteroid.accelerate();
+        asteroid.accelerate();
 
         Scene scene = new Scene(pane);
 
@@ -45,9 +49,12 @@ public class PaneExample extends Application {
                     ship.turnRight();
                 }
 
+                if(pressedKeys.getOrDefault(KeyCode.UP, false)) {
+                    ship.accelerate();
+                }
+
                 ship.move();
             }
-
         }.start();
 
         stage.setTitle("Asteroids!");
