@@ -1,5 +1,6 @@
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Shape;
 
 public abstract class Character {
     private Polygon character;
@@ -11,6 +12,21 @@ public abstract class Character {
         this.character.setTranslateY(y);
 
         this.movement = new Point2D(0, 0);
+    }
+
+    public Point2D getMovement() {
+        return movement;
+    }
+
+    public void setMovement(Point2D movement) {
+        this.movement = movement;
+    }
+
+    public Polygon getPolygon(){
+        return this.character;
+    }
+    public void setPolygon(Polygon polygon){
+        this.character = polygon;
     }
 
     public Polygon getCharacter() {
@@ -28,6 +44,22 @@ public abstract class Character {
     public void move() {
         this.character.setTranslateX(this.character.getTranslateX() + this.movement.getX());
         this.character.setTranslateY(this.character.getTranslateY() + this.movement.getY());
+
+        if (this.character.getTranslateX() < 0) {
+            this.character.setTranslateX(this.character.getTranslateX() + AsteroidsApplication.HEIGHT);
+        }
+
+        if (this.character.getTranslateX() > AsteroidsApplication.HEIGHT) {
+            this.character.setTranslateX(this.character.getTranslateX() % AsteroidsApplication.HEIGHT);
+        }
+
+        if (this.character.getTranslateY() < 0) {
+            this.character.setTranslateY(this.character.getTranslateY() + AsteroidsApplication.WIDTH);
+        }
+
+        if (this.character.getTranslateY() > AsteroidsApplication.WIDTH) {
+            this.character.setTranslateY(this.character.getTranslateY() % AsteroidsApplication.WIDTH);
+        }
     }
 
     public void accelerate() {
@@ -38,5 +70,10 @@ public abstract class Character {
         changeY *= 0.05;
 
         this.movement = this.movement.add(changeX, changeY);
+    }
+
+    public boolean collide(Character other) {
+        Shape collisionArea = Shape.intersect(this.character, other.getCharacter());
+        return collisionArea.getBoundsInLocal().getWidth() != -1;
     }
 }
