@@ -153,10 +153,12 @@ public class AsteroidsApplication extends Application {
 
                 asteroids.forEach(asteroid -> {
                     if (ship.collide(asteroid)) {
-                        Text gameOverText = new Text(WIDTH /4, HEIGHT /2, "GAME OVER\nScore: " + points);
-                        gameOverText.setStyle("-fx-font-size:400px");
-                        gameOverText.setStyle("-fx-font-family: 'Courier New'");
-                        gameOverText.setStyle("-fx-text-alignment: 'center'");
+                        Text gameOverText = new Text( 50, 200, "GAME OVER\nScore: " + points);
+                        gameOverText.setStyle("-fx-font-size: 100px");
+
+
+
+
                         gameOverText.setFill(Color.RED);
                         pane.getChildren().add(gameOverText);
                         stop();
