@@ -1,8 +1,11 @@
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -152,21 +155,24 @@ public class AsteroidsApplication extends Application {
 
                 asteroids.forEach(asteroid -> {
                     if (ship.collide(asteroid)) {
-                        Text gameOverText = new Text( 50, 200, "GAME OVER\nScore: " + points);
-                        gameOverText.setStyle("-fx-font-size: 100px");
+                        VBox layout = new VBox();
+                        layout.setAlignment(Pos.CENTER);
+                        layout.setStyle("-fx-background-color: BLACK");
+                        Scene gameOverScene = new Scene(layout, WIDTH, HEIGHT);
+
+                        Label gameOverText = new Label( "GAME OVER\nScore: " + points);
+                        gameOverText.setTextFill(Color.RED);
+                        layout.getChildren().addAll(gameOverText);
 
 
-
-
-                        gameOverText.setFill(Color.RED);
-                        pane.getChildren().add(gameOverText);
+                        stage.setScene(gameOverScene);
                         stop();
                     }
                 });
             }
         }.start();
 
-        stage.setTitle("Asteroids!");
+        stage.setTitle("Asteroids Shooter");
         stage.setScene(scene);
         stage.show();
     }
