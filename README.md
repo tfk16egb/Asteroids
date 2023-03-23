@@ -1,6 +1,8 @@
 # Asteroids
 Slutprojekt i OODP2 \
-Demo finns att kolla på: https://www.youtube.com/watch?v=9Ydu8UhIjeU
+Demo finns att kolla på: https://www.youtube.com/watch?v=9Ydu8UhIjeU \
+### Tutorial som följs
+https://java-programming.mooc.fi/part-14/3-larger-application-asteroids
 
 ## Egenskaper och minimikrav
 
