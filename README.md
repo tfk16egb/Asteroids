@@ -7,16 +7,19 @@ https://java-programming.mooc.fi/part-14/3-larger-application-asteroids
 ## Egenskaper och minimikrav
 
 ** MARKERA AVKLARAD UPPGIFT med X
-- [ ] Asteroider ska variera i form och storlek
-- [ ] Asteroidernas rörelseriktning ska vara slumpmässig
-- [ ] Rymdskeppet kan skjuta asteroider och andra hinder
-- [ ] När ett skott träffar en asteroid försvinner den från skärmen
+- [X] Asteroider ska variera i form och storlek
+- [X] Asteroidernas rörelseriktning ska vara slumpmässig
+- [X] Rymdskeppet kan skjuta asteroider och andra hinder
+- [X] När ett skott träffar en asteroid försvinner den från skärmen
 - [ ] Det ska finnas ett fiendeskepp som kan skjuta mot rymdskeppet. Fiendeskeppet
       dyker upp med jämna mellanrum, t ex var tionde sekund.
-- [ ] Rymdskeppet kan röra sig över hela skärmen. Om rymdskeppet går utanför skärmen
+- [X] Rymdskeppet kan röra sig över hela skärmen. Om rymdskeppet går utanför skärmen
       dyker den upp på andra sidan av skärmen.
-- [ ] Rymdskeppet ska kunna accelerera och svänga
-- [ ] När rymdskeppet träffas av en asteroid eller en projektil, avslutas spelet
+- [X] Rymdskeppet ska kunna accelerera och svänga
+- [X] När rymdskeppet träffas av en asteroid, avslutas spelet
+- [ ] När rymdskeppet träffas av en projektil, avslutas spelet
+- [ ] Formatera om koden enligt MVC
+- [ ] Dela in koden i olika Design-patterns
 
 ## Extra features
 OBS! Om ni arbetar i par måste ni ha med åtminstone en av extra features nedan. Om
