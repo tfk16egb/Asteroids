@@ -1,15 +1,28 @@
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+
+
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 
 public class AsteroidsApplication extends Application {
 
@@ -154,13 +167,54 @@ public class AsteroidsApplication extends Application {
                     if (ship.collide(asteroid)) {
                         Text gameOverText = new Text( 50, 200, "GAME OVER\nScore: " + points);
                         gameOverText.setStyle("-fx-font-size: 100px");
-
-
-
-
                         gameOverText.setFill(Color.RED);
                         pane.getChildren().add(gameOverText);
                         stop();
+                        // koden nedan är för skrivande av poäng till fil.
+                        // Read existing JSON objects from the file
+                        JSONArray existingObjects = new JSONArray();
+                        try (FileReader reader = new FileReader("example.json")) {
+                            existingObjects = (JSONArray) new JSONParser().parse(reader);
+                        } catch (FileNotFoundException e) {
+                            // Ignore file not found errors, we will create the file later
+                        } catch (IOException | ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        // Create a new JSON object for the current game score
+                        JSONObject newObject = new JSONObject();
+                        newObject.put("points", points);
+
+                        // Add the new JSON object to the existing array
+                        existingObjects.add(newObject);
+
+                        // Write the updated JSON array to the file
+                        try (FileWriter file = new FileWriter("example.json")) {
+                            file.write(existingObjects.toJSONString());
+                            file.flush();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        existingObjects.sort((o1, o2) -> {
+                            int points1 = Integer.parseInt(((JSONObject) o1).get("points").toString());
+                            int points2 = Integer.parseInt(((JSONObject) o2).get("points").toString());
+                            return Integer.compare(points2, points1);
+                        });
+
+                        //
+                        int x = 50;
+                        int y = 350;
+                        for (int i = 0; i < Math.min(existingObjects.size(), 10); i++) {
+                            JSONObject object = (JSONObject) existingObjects.get(i);
+                            int points = Integer.parseInt(object.get("points").toString());
+                            Text text = new Text(x, y, "Score " + (i + 1) + ": " + points);
+                            text.setStyle("-fx-font-size: 30px");
+                            text.setFill(Color.WHITE);
+                            y += 40;
+                            pane.getChildren().add(text);
+                        }
+
                     }
                 });
             }

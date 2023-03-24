@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Asteroids.iml" filepath="$PROJECT_DIR$/Asteroids.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../../../HÖGSKOLAN/JSON SIMPLE/json-simple-master/src/main/java/org/org.iml" filepath="$PROJECT_DIR$/../../../../HÖGSKOLAN/JSON SIMPLE/json-simple-master/src/main/java/org/org.iml" />
     </modules>
   </component>
 </project>
