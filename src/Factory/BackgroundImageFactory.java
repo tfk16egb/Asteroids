@@ -18,6 +18,12 @@ public class BackgroundImageFactory {
         this.HEIGHT = HEIGHT;
     }
 
+    public BackgroundImageFactory(int WIDTH, int HEIGHT, String... images) {
+        loadImages(images);
+        this.WIDTH = WIDTH;
+        this.HEIGHT = HEIGHT;
+    }
+
     public void loadImages(String... imageNames) {
         Arrays.stream(imageNames).forEach(imageName -> {
             imagesMap.put(imageName,imageToBackground(new Image(imageName)));
