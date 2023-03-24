@@ -1,10 +1,10 @@
 <component name="libraryTable">
   <library name="lib">
     <CLASSES>
-      <root url="file://C:/Program Files/Eclipse Adoptium/javafx-sdk-17.0.6/lib" />
+      <root url="file://$PROJECT_DIR$/../../../../Program Files/JAVAFX SDK/javafx-sdk-20/lib" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
-    <jarDirectory url="file://C:/Program Files/Eclipse Adoptium/javafx-sdk-17.0.6/lib" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/../../../../Program Files/JAVAFX SDK/javafx-sdk-20/lib" recursive="false" />
   </library>
 </component>
