@@ -5,6 +5,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 
 public class StartPage extends Application {
@@ -39,7 +46,7 @@ public class StartPage extends Application {
 
 
         playPane.getChildren().add(mainMenuBtn_1);
-        scorePane.getChildren().add(mainMenuBtn_2);
+        //scorePane.getChildren().add(mainMenuBtn_2);
 
         primaryStage.setTitle("Asteroid Shooter");
         primaryStage.setScene(mainScene);
@@ -76,8 +83,26 @@ public class StartPage extends Application {
     }
 
     private Scene getScoreScene() {
+        ListView listView = new ListView<>();
+        listView.setMaxHeight(200);
+        JSONArray jsonArray = new JSONArray();
+        try (FileReader fileReader = new FileReader("example.json")) {
+            jsonArray = (JSONArray) new JSONParser().parse(fileReader);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        jsonArray.forEach(item -> {
+            listView.getItems().add(item);
+        });
+
         scorePane = new GridPane();
+        scorePane.setHgap(10);
+        scorePane.setVgap(10);
+        scorePane.setPadding(new Insets(0, 10, 0, 10));
         mainMenuBtn_2 = new Button("MAIN MENU");
+        scorePane.add(listView,7,14);
+        scorePane.addRow(0, mainMenuBtn_2);
         Scene scoreScene = new Scene(scorePane, WIDTH, HEIGHT);
         scorePane.setBackground(bImgFactory.getBackground("scoreboard.png"));
 
