@@ -1,3 +1,8 @@
+package View;
+
+import Model.Asteroid;
+import Model.Projectile;
+import Model.Ship;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;

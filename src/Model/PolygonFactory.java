@@ -1,3 +1,5 @@
+package Model;
+
 import java.util.Random;
 import javafx.scene.shape.Polygon;
 public class PolygonFactory {

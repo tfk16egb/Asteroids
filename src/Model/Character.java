@@ -1,3 +1,6 @@
+package Model;
+
+import View.AsteroidsApplication;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;

@@ -1,8 +1,10 @@
+package Model;
+
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 
-public class Projectile extends Character{
+public class Projectile extends Character {
 
     private boolean isAlive;
     public Projectile(int x, int y) {

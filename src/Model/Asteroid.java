@@ -1,10 +1,12 @@
+package Model;
+
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
 import java.awt.*;
 import java.util.Random;
 
-public class Asteroid extends Character{
+public class Asteroid extends Character {
     private double rotationalMovement;
     private boolean isAlive;
 
