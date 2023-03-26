@@ -1,9 +1,6 @@
 package Controller;
 
-import Model.Asteroid;
-import Model.PolygonFactory;
-import Model.Projectile;
-import Model.Ship;
+import Model.*;
 import Observer.AddObjectCallback;
 import Observer.CollidedObjectCallback;
 import View.AsteroidsApplication;
@@ -22,6 +19,7 @@ public class GameController {
 
     List<Asteroid> asteroids = new ArrayList<>();
     List<Projectile> projectiles = new ArrayList<>();
+    List<Particle> particles = new ArrayList<>();
     Ship ship;
     private CollidedObjectCallback collisionCallback;
     private AddObjectCallback addCallback;
@@ -33,6 +31,42 @@ public class GameController {
             Random rnd = new Random();
             Asteroid asteroid = new Asteroid(rnd.nextInt(WIDTH/3), rnd.nextInt(HEIGHT), PolygonFactory.AsteroidSize.LARGE);
             asteroids.add(asteroid);
+        }
+    }
+
+    private void createParticles(int x, int y){
+        List<Node> nodesToAdd = new ArrayList<>();
+
+        for(int i = 0; i < 6; i++){
+            Particle particle = new Particle(x, y);
+            particles.add(particle);
+            nodesToAdd.add(particle.getNode());
+        }
+
+        if(addCallback != null){
+            addCallback.onAddObjects(nodesToAdd);
+        }
+    }
+
+    public void updateParicle(){
+        List<Node> nodesToRemove = new ArrayList<>();
+
+        for(int i = 0; i < particles.size(); i++){
+            Particle particle = particles.get(i);
+            particle.move();
+            if(!particle.isAlive()){
+                nodesToRemove.add(particles.get(i).getNode());
+                particles.remove(i);
+                i--;
+            }
+        }
+
+        particles.removeAll(particles
+                .stream().filter(particle -> !particle.isAlive())
+                .collect(Collectors.toList()));
+
+        if (collisionCallback != null) {
+            collisionCallback.onCollidedObjectsChanged(nodesToRemove);
         }
     }
 
@@ -71,6 +105,7 @@ public class GameController {
                 .filter(asteroid -> !asteroid.isAlive())
                 .forEach(asteroid -> {
                     nodesToRemove.add(asteroid.getNode());
+                    createParticles((int) asteroid.getCharacter().getTranslateX(), (int) asteroid.getCharacter().getTranslateY());
                     if(asteroid.getSize() == PolygonFactory.AsteroidSize.LARGE){
                         asteroidToAdd.add(new Asteroid((int) asteroid.getCharacter().getTranslateX(), (int) asteroid.getCharacter().getTranslateY(),
                                 PolygonFactory.AsteroidSize.MEDIUM));
