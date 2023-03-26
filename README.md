@@ -18,8 +18,10 @@ https://java-programming.mooc.fi/part-14/3-larger-application-asteroids
 - [X] Rymdskeppet ska kunna accelerera och svänga
 - [X] När rymdskeppet träffas av en asteroid, avslutas spelet
 - [ ] När rymdskeppet träffas av en projektil, avslutas spelet
-- [ ] Formatera om koden enligt MVC
+- [X] Formatera om koden enligt MVC
 - [ ] Dela in koden i olika Design-patterns
+      - Factory Method [X]
+      - Observable [X]
 
 ## Extra features
 OBS! Om ni arbetar i par måste ni ha med åtminstone en av extra features nedan. Om
@@ -27,7 +29,7 @@ ni arbetar i grupp av tre måste ni ha minst två extra features.
 
 ** VALDA EXTRA FEATURES
 
-- [X] Asteroider har ingen predefinierad form. Formen slumpas fram när en asteroid skapas
+- [ ] Asteroider har ingen predefinierad form. Formen slumpas fram när en asteroid skapas
 - [ ] Om ett skott träffar en asteroid slits den upp i flera små mindre asteroider som rör
       sig åt olika håll
 - [ ] När en asteroid träffas, exploderar den (simulera med någon visuell effekt)
