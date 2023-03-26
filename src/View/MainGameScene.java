@@ -61,7 +61,8 @@ public class MainGameScene{
         });
 
         new AnimationTimer() {
-
+            long lastShotTime = 0;
+            int shotsFired = 0; // added counter
             @Override
             public void handle(long now) {
 
@@ -77,9 +78,13 @@ public class MainGameScene{
                     controller.getShip().accelerate();
                 }
 
-                if (pressedKeys.getOrDefault(KeyCode.SPACE, false) && controller.getProjectileSize() < 10) {
+                if (pressedKeys.getOrDefault(KeyCode.SPACE, false) && now - lastShotTime >= 150_000_000 && shotsFired < 4) {
                     // we shoot
+                    lastShotTime = now;
                     controller.shootProjectile();
+                    shotsFired++; // increment counter
+                } else if (!pressedKeys.getOrDefault(KeyCode.SPACE, false)) {
+                    shotsFired = 0; // reset counter when space is released
                 }
                 controller.getShip().move();
                 controller.moveAsteroid();

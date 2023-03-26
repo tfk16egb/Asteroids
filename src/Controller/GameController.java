@@ -89,7 +89,7 @@ public class GameController {
 
     public void addAsteroidAtRandom(){
         List<Node> nodesToAdd = new ArrayList<>();
-        if(Math.random() < 0.05) {
+        if(Math.random() < 0.01) {
             Asteroid asteroid = new Asteroid(WIDTH, HEIGHT);
             if(!asteroid.collide(ship)) {
                 asteroids.add(asteroid);
