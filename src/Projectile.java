@@ -9,7 +9,7 @@ public class Projectile extends Character{
         super(new Polygon(4, -2, 4, 2, -2, 2, -2, -2), x, y);
 
         Polygon polygon = getPolygon();
-        polygon.setFill(Color.LIGHTGREEN);
+        polygon.setFill(Color.LIGHTPINK);
         setAlive(true);
     }
 

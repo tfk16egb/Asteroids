@@ -1,5 +1,9 @@
+import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -13,11 +17,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.InstantSource;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 
+import javafx.util.Duration;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.json.simple.JSONArray;
@@ -38,6 +44,11 @@ public class AsteroidsApplication extends Application {
 
         List<Asteroid> asteroids = new ArrayList<>();
         List<Projectile> projectiles = new ArrayList<>();
+        List<EnemyShip> enemyShips = new ArrayList<>();
+        List<Projectile> enemyProjectiles = new ArrayList<>();
+
+
+
         List<Projectile> projectilesToRemove = projectiles.stream().filter(projectile -> {
             List<Asteroid> collisions = asteroids.stream()
                     .filter(asteroid -> asteroid.collide(projectile))
@@ -64,6 +75,8 @@ public class AsteroidsApplication extends Application {
         pane.setStyle("-fx-background-color: black;");
 
         Ship ship = new Ship(WIDTH/2, HEIGHT/2);
+
+
         for (int i = 0; i < 8; i++) {
             Random rnd = new Random();
             Asteroid asteroid = new Asteroid(rnd.nextInt(WIDTH/3), rnd.nextInt(HEIGHT));
@@ -71,6 +84,7 @@ public class AsteroidsApplication extends Application {
         }
 
         pane.getChildren().add(ship.getCharacter());
+        Random rand = new Random();
         pane.getChildren().add(text);
         asteroids.forEach(asteroid -> pane.getChildren().add(asteroid.getCharacter()));
 
@@ -87,6 +101,17 @@ public class AsteroidsApplication extends Application {
         scene.setOnKeyReleased(event -> {
             pressedKeys.put(event.getCode(), Boolean.FALSE);
         });
+        Timer enemySpawnTimer = new Timer();
+        enemySpawnTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    EnemyShip enemyShip = new EnemyShip(rand.nextInt(HEIGHT), rand.nextInt(WIDTH));
+                    enemyShips.add(enemyShip);
+                    pane.getChildren().add(enemyShip.getCharacter());
+                });
+            }
+        }, 5_000, 5_000);
 
         new AnimationTimer() {
 
@@ -117,6 +142,10 @@ public class AsteroidsApplication extends Application {
 
                     pane.getChildren().add(projectile.getCharacter());
                 }
+                enemyShips.forEach(enemyShip -> {
+                    enemyShip.followShip(ship);
+                    enemyShip.move();
+                });
                 ship.move();
                 asteroids.forEach(asteroid -> asteroid.move());
                 projectiles.forEach(projectile -> projectile.move());
@@ -170,6 +199,7 @@ public class AsteroidsApplication extends Application {
                         gameOverText.setFill(Color.RED);
                         pane.getChildren().add(gameOverText);
                         stop();
+                        enemySpawnTimer.cancel();
                         // koden nedan är för skrivande av poäng till fil.
                         // Read existing JSON objects from the file
                         JSONArray existingObjects = new JSONArray();
