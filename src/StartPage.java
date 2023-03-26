@@ -1,5 +1,5 @@
-import Factory.BackgroundImageFactory;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -7,11 +7,8 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 
 
 public class StartPage extends Application {
@@ -19,8 +16,10 @@ public class StartPage extends Application {
     public static int HEIGHT = 600;
 
     private Button startBtn, scoreBtn, playGameBtn, mainMenuBtn_1, mainMenuBtn_2;
-    private BackgroundImageFactory bImgFactory;
+    private BackgroundImageConverter bImgFactory;
     private GridPane mainPane, playPane, scorePane;
+
+    private TextField name;
 
     public static void main(String[] args) {
         launch(args);
@@ -28,8 +27,8 @@ public class StartPage extends Application {
 
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        bImgFactory = new BackgroundImageFactory(WIDTH, HEIGHT);
+    public void start(Stage primaryStage) {
+        bImgFactory = new BackgroundImageConverter(WIDTH, HEIGHT);
         bImgFactory.loadImages(
                 "playgame.png",
                 "startscreen.png",
@@ -43,10 +42,15 @@ public class StartPage extends Application {
         mainMenuBtn_2.setOnAction(e -> primaryStage.setScene(mainScene));
         startBtn.setOnAction(e -> primaryStage.setScene(playScene));
         scoreBtn.setOnAction(e -> primaryStage.setScene(scoreScene));
+        playGameBtn.setOnAction(e -> {
+            try {
+                new AsteroidsApplication().start(new Stage());
 
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
-        playPane.getChildren().add(mainMenuBtn_1);
-        //scorePane.getChildren().add(mainMenuBtn_2);
 
         primaryStage.setTitle("Asteroid Shooter");
         primaryStage.setScene(mainScene);
@@ -72,10 +76,20 @@ public class StartPage extends Application {
 
     private Scene getPlayScene() {
         playPane = new GridPane();
+        playPane.setHgap(10);
+        playPane.setVgap(10);
+        playPane.setPadding(new Insets(0, 10, 0, 10));
         playGameBtn = new Button("PLAY");
+        playGameBtn.setPrefWidth(100);
+        name = new TextField();
+        name.setPromptText("Playername");
+        name.setPrefColumnCount(10);
+        name.getText();
         playGameBtn.setTranslateY(20);
         mainMenuBtn_1 = new Button("MAIN MENU");
-
+        playPane.addRow(0, mainMenuBtn_1);
+        playPane.add(name, 8,25);
+        playPane.add(playGameBtn,9, 25);
         Scene playScene = new Scene(playPane, WIDTH, HEIGHT);
         playPane.setBackground(bImgFactory.getBackground("playgame.png"));
 
@@ -85,7 +99,7 @@ public class StartPage extends Application {
     private Scene getScoreScene() {
         ListView listView = new ListView<>();
         listView.setMaxHeight(200);
-        JSONArray jsonArray = new JSONArray();
+        JSONArray jsonArray;
         try (FileReader fileReader = new FileReader("example.json")) {
             jsonArray = (JSONArray) new JSONParser().parse(fileReader);
         } catch (Exception e) {

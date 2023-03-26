@@ -1,5 +1,3 @@
-package Factory;
-
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 
@@ -8,17 +6,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class BackgroundImageFactory {
+public class BackgroundImageConverter {
     private Map<String, Background> imagesMap = new HashMap<>();
     private int WIDTH;
     private int HEIGHT;
 
-    public BackgroundImageFactory(int WIDTH, int HEIGHT) {
+    public BackgroundImageConverter(int WIDTH, int HEIGHT) {
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
     }
 
-    public BackgroundImageFactory(int WIDTH, int HEIGHT, String... images) {
+    public BackgroundImageConverter(int WIDTH, int HEIGHT, String... images) {
         loadImages(images);
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
