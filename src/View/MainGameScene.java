@@ -93,7 +93,7 @@ public class MainGameScene{
                 points.addAndGet(controller.calculateScore());
                 text.setText("Points: " + points.intValue());
 
-                controller.removeProjectileThatHitAstroids()    ;
+                controller.removeProjectileThatHitAstroids();
                 controller.addAsteroidAtRandom();
 
                 if(controller.gameOver()){

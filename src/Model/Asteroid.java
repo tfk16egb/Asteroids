@@ -9,9 +9,10 @@ import java.util.Random;
 public class Asteroid extends Character {
     private double rotationalMovement;
     private boolean isAlive;
+    private PolygonFactory.AsteroidSize size;
 
-    public Asteroid(int x, int y) {
-        super(new PolygonFactory().createPolygon(), x, y);
+    public Asteroid(int x, int y, PolygonFactory.AsteroidSize size) {
+        super(new PolygonFactory().createPolygon(size), x, y);
         Polygon polygon = getPolygon();
         polygon.setFill(Color.GREY);
         setPolygon(polygon);
@@ -26,6 +27,7 @@ public class Asteroid extends Character {
             accelerate();
         }
 
+        this.size = size;
         this.rotationalMovement = 0.5 - rnd.nextDouble();
     }
 
@@ -41,5 +43,9 @@ public class Asteroid extends Character {
 
     public boolean isAlive() {
         return this.isAlive;
+    }
+
+    public PolygonFactory.AsteroidSize getSize(){
+        return size;
     }
 }

@@ -1,6 +1,7 @@
 package Controller;
 
 import Model.Asteroid;
+import Model.PolygonFactory;
 import Model.Projectile;
 import Model.Ship;
 import Observer.AddObjectCallback;
@@ -30,7 +31,7 @@ public class GameController {
 
         for (int i = 0; i < 8; i++) {
             Random rnd = new Random();
-            Asteroid asteroid = new Asteroid(rnd.nextInt(WIDTH/3), rnd.nextInt(HEIGHT));
+            Asteroid asteroid = new Asteroid(rnd.nextInt(WIDTH/3), rnd.nextInt(HEIGHT), PolygonFactory.AsteroidSize.LARGE);
             asteroids.add(asteroid);
         }
     }
@@ -57,6 +58,7 @@ public class GameController {
 
     public void removeProjectileThatHitAstroids(){
         List<Node> nodesToRemove = new ArrayList<>();
+        List<Asteroid> asteroidToAdd = new ArrayList<>();
 
         projectiles.stream()
                 .filter(projectile -> !projectile.isAlive())
@@ -67,7 +69,21 @@ public class GameController {
 
         asteroids.stream()
                 .filter(asteroid -> !asteroid.isAlive())
-                .forEach(asteroid -> nodesToRemove.add(asteroid.getNode()));
+                .forEach(asteroid -> {
+                    nodesToRemove.add(asteroid.getNode());
+                    if(asteroid.getSize() == PolygonFactory.AsteroidSize.LARGE){
+                        asteroidToAdd.add(new Asteroid((int) asteroid.getCharacter().getTranslateX(), (int) asteroid.getCharacter().getTranslateY(),
+                                PolygonFactory.AsteroidSize.MEDIUM));
+                        asteroidToAdd.add(new Asteroid((int) asteroid.getCharacter().getTranslateX(), (int) asteroid.getCharacter().getTranslateY(),
+                                PolygonFactory.AsteroidSize.MEDIUM));
+                    }
+                    if(asteroid.getSize() == PolygonFactory.AsteroidSize.MEDIUM){
+                        asteroidToAdd.add(new Asteroid((int) asteroid.getCharacter().getTranslateX(), (int) asteroid.getCharacter().getTranslateY(),
+                                PolygonFactory.AsteroidSize.SMALL));
+                        asteroidToAdd.add(new Asteroid((int) asteroid.getCharacter().getTranslateX(), (int) asteroid.getCharacter().getTranslateY(),
+                                PolygonFactory.AsteroidSize.SMALL));
+                    }
+                });
         asteroids.removeAll(asteroids.stream()
                 .filter(asteroid -> !asteroid.isAlive())
                 .collect(Collectors.toList()));
@@ -82,15 +98,33 @@ public class GameController {
             });
         });
 
+        List<Node> nodesToAdd = new ArrayList<>();
+
+        for(int i = 0; i < asteroidToAdd.size(); i++){
+            asteroids.add(asteroidToAdd.get(i));
+            nodesToAdd.add(asteroidToAdd.get(i).getNode());
+        }
+
         if (collisionCallback != null) {
             collisionCallback.onCollidedObjectsChanged(nodesToRemove);
+        }
+
+        if (addCallback != null){
+            addCallback.onAddObjects(nodesToAdd);
         }
     }
 
     public void addAsteroidAtRandom(){
         List<Node> nodesToAdd = new ArrayList<>();
+        List<PolygonFactory.AsteroidSize> asteroidSizes = new ArrayList<>();
+        asteroidSizes.add(PolygonFactory.AsteroidSize.LARGE);
+        asteroidSizes.add(PolygonFactory.AsteroidSize.MEDIUM);
+        asteroidSizes.add(PolygonFactory.AsteroidSize.SMALL);
+        Random random = new Random();
+
         if(Math.random() < 0.01) {
-            Asteroid asteroid = new Asteroid(WIDTH, HEIGHT);
+            PolygonFactory.AsteroidSize size = asteroidSizes.get(random.nextInt(3));
+            Asteroid asteroid = new Asteroid(WIDTH, HEIGHT, size);
             if(!asteroid.collide(ship)) {
                 asteroids.add(asteroid);
                 nodesToAdd.add(asteroid.getNode());
