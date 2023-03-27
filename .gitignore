@@ -1,0 +1,13 @@
+/out/production/Asteroids/Observer/AddObjectCallback.class
+/out/production/Asteroids/Model/Asteroid.class
+/out/production/Asteroids/View/AsteroidsApplication.class
+/out/production/Asteroids/Model/Character.class
+/out/production/Asteroids/Observer/CollidedObjectCallback.class
+/out/production/Asteroids/Controller/GameController.class
+/out/production/Asteroids/View/MainGameScene$1.class
+/out/production/Asteroids/View/MainGameScene.class
+/out/production/Asteroids/Model/Particle.class
+/out/production/Asteroids/Model/PolygonFactory$AsteroidSize.class
+/out/production/Asteroids/Model/PolygonFactory.class
+/out/production/Asteroids/Model/Projectile.class
+/out/production/Asteroids/Model/Ship.class
