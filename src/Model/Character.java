@@ -1,4 +1,8 @@
+package Model;
+
+import View.AsteroidsApplication;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 
@@ -30,6 +34,10 @@ public abstract class Character {
     }
 
     public Polygon getCharacter() {
+        return character;
+    }
+
+    public Node getNode(){
         return character;
     }
 
