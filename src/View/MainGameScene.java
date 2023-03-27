@@ -77,11 +77,11 @@ public class MainGameScene {
 
         new AnimationTimer() {
             long lastShotTime = 0;
-            int shotsFired = 0; // added counter
-
+            final long COOLDOWN_PERIOD = 150_000_000; // 150 milliseconds in nanoseconds
+            final int MAX_PROJECTILES = 4;
+            int shotsFired = 0;
             @Override
             public void handle(long now) {
-
                 if (pressedKeys.getOrDefault(KeyCode.LEFT, false)) {
                     controller.getShip().turnLeft();
                 }
@@ -94,13 +94,14 @@ public class MainGameScene {
                     controller.getShip().accelerate();
                 }
 
-                if (pressedKeys.getOrDefault(KeyCode.SPACE, false) && now - lastShotTime >= 150_000_000 && shotsFired < 4) {
-                    // we shoot
-                    lastShotTime = now;
-                    controller.shootProjectile();
-                    shotsFired++; // increment counter
-                } else if (!pressedKeys.getOrDefault(KeyCode.SPACE, false)) {
-                    shotsFired = 0; // reset counter when space is released
+                if (pressedKeys.getOrDefault(KeyCode.SPACE, false)) {
+                    if (now - lastShotTime >= COOLDOWN_PERIOD && shotsFired < MAX_PROJECTILES) {
+                        controller.shootProjectile();
+                        lastShotTime = now;
+                        shotsFired++;
+                    }
+                } else {
+                    shotsFired = 0;
                 }
                 controller.getShip().move();
                 controller.moveAsteroid();
@@ -113,7 +114,7 @@ public class MainGameScene {
                 controller.removeProjectileThatHitAstroids();
                 controller.updateParicle();
 
-                controller.addAsteroidAtRandom();
+               // controller.addAsteroidAtRandom();
 
                 if (controller.gameOver()) {
                     Text restart = new Text(130, 380, "PRESS R TO RESTART\nPRESS B FOR MAIN MENU");
@@ -134,26 +135,34 @@ public class MainGameScene {
     }
 
     private void gameOverAnimation(){
+        Map<KeyCode, Boolean> pressedKeys = new HashMap<>();
+
+        gameScene.setOnKeyPressed(event -> {
+            pressedKeys.put(event.getCode(), Boolean.TRUE);
+        });
+
+        gameScene.setOnKeyReleased(event -> {
+            pressedKeys.put(event.getCode(), Boolean.FALSE);
+        });
+
         new AnimationTimer(){
             @Override
             public void handle(long now) {
-                gameScene.setOnKeyPressed(event -> {
-                    if (event.getCode() == KeyCode.R) {
-                        startAnimation();
-                        initGame();
-                        stop();
-                    }
-                });
-                gameScene.setOnKeyPressed(event -> {
-                    if (event.getCode() == KeyCode.B) {
-                        BackgroundImageConverter bImgConverter =
-                                new BackgroundImageConverter(WIDTH, HEIGHT,
-                                        "startscreen.png",
-                                        "playgame.png",
-                                        "scoreboard.png");
-                        switchScene(new MenuScene(stage, bImgConverter).getScene());
-                    }
-                });
+                if (pressedKeys.getOrDefault(KeyCode.R, false)) {
+                    startAnimation();
+                    initGame();
+                    stop();
+                }
+
+                if (pressedKeys.getOrDefault(KeyCode.B, false)) {
+                    BackgroundImageConverter bImgConverter =
+                            new BackgroundImageConverter(WIDTH, HEIGHT,
+                                    "startscreen.png",
+                                    "playgame.png",
+                                    "scoreboard.png");
+                    switchScene(new MenuScene(stage, bImgConverter).getScene());
+                    stop();
+                }
             }
         }.start();
     }
