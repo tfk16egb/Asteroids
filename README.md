@@ -20,8 +20,8 @@ https://java-programming.mooc.fi/part-14/3-larger-application-asteroids
 - [ ] När rymdskeppet träffas av en projektil, avslutas spelet
 - [X] Formatera om koden enligt MVC
 - [ ] Dela in koden i olika Design-patterns
-      - Factory Method [X]
-      - Observable [X]
+  - [X] Factory Method
+  - [X] Observable
 
 ## Extra features
 OBS! Om ni arbetar i par måste ni ha med åtminstone en av extra features nedan. Om

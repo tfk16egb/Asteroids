@@ -33,7 +33,7 @@ public class InsertNameScene {
             switchScene(new MenuScene(stage, bImgConverter).getScene());
         });
         play.setOnAction(e -> {
-            MainGameScene mainGame = new MainGameScene(new GameController());
+            MainGameScene mainGame = new MainGameScene(new GameController(), stage);
             switchScene(mainGame.getScene());
             mainGame.startAnimation();
         });
