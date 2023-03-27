@@ -1,5 +1,6 @@
 package View;
 
+import Controller.DatabaseController;
 import Model.BackgroundImageConverter;
 import javafx.geometry.Insets;
 import javafx.scene.*;
@@ -16,6 +17,7 @@ public class MenuScene {
 
 
     public MenuScene(Stage stage, BackgroundImageConverter bImgConverter) {
+        dbInit();
         this.stage = stage;
         Button start = new Button("START");
         Button scoreboard = new Button("Score");
@@ -36,6 +38,10 @@ public class MenuScene {
             ScoreboardScene scoreboardScene = new ScoreboardScene(stage, bImgConverter);
             switchScene(scoreboardScene.getScene());
         });
+    }
+
+    private void dbInit(){
+        DatabaseController db = new DatabaseController();
     }
 
     private void switchScene(Scene scene){

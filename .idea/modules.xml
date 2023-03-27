@@ -3,7 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Asteroids.iml" filepath="$PROJECT_DIR$/Asteroids.iml" />
-      <module fileurl="file://C:/Program Files/Eclipse Adoptium/json-simple-master/src/main/java/org/org.iml" filepath="C:/Program Files/Eclipse Adoptium/json-simple-master/src/main/java/org/org.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../../../Program Files/Eclipse Adoptium/json-simple-master/src/main/java/org/org.iml" filepath="$PROJECT_DIR$/../../../../Program Files/Eclipse Adoptium/json-simple-master/src/main/java/org/org.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../../../Program Files/Java/json-simple-master/src/main/java/org/org1.iml" filepath="$PROJECT_DIR$/../../../../Program Files/Java/json-simple-master/src/main/java/org/org1.iml" />
     </modules>
   </component>
 </project>

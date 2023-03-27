@@ -1,5 +1,6 @@
 package View;
 
+import Controller.DatabaseController;
 import Controller.GameController;
 import Model.BackgroundImageConverter;
 import javafx.animation.AnimationTimer;
@@ -9,8 +10,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -22,6 +21,7 @@ import static View.AsteroidsApplication.*;
 public class MainGameScene {
 
     private GameController controller;
+    private DatabaseController db;
     private Scene gameScene;
     private Pane gamePane;
     private Text text;
@@ -42,6 +42,8 @@ public class MainGameScene {
 
     public MainGameScene(GameController controller, Stage stage) {
         this.stage = stage;
+        db = new DatabaseController();
+        db.setDatabasePath("example.json");
         gamePane = new Pane();
         text = new Text(30, 60, "0");
         text.setFill(Color.GREY);
@@ -112,13 +114,14 @@ public class MainGameScene {
 
 
                 controller.removeProjectileThatHitAstroids();
-                controller.updateParicle();
+                controller.updateParticle();
 
                // controller.addAsteroidAtRandom();
 
                 if (controller.gameOver()) {
                     Text restart = new Text(130, 380, "PRESS R TO RESTART\nPRESS B FOR MAIN MENU");
                     Text gameOverText = new Text(130, 250, "GAME OVER\nScore: " + points);
+                    db.save("User_name", points.intValue());
                     gameOverText.setFont(font);
                     gameOverText.setStyle("-fx-font-size: 55px");
                     gameOverText.setFill(Color.WHITE);

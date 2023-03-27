@@ -1,5 +1,6 @@
 package View;
 
+import Controller.DatabaseController;
 import Model.BackgroundImageConverter;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,19 +18,22 @@ public class ScoreboardScene {
 
     private final BorderPane borderPane;
 
+    private final DatabaseController db;
+
     public ScoreboardScene(Stage stage, BackgroundImageConverter bImgConverter) {
         this.stage = stage;
+        this.db = new DatabaseController();
         Button backToMenu = new Button("Back");
-        //backToMenu.setFont(FONT);
+
 
 
         ListView listView = new ListView<>();
         listView.setStyle("-fx-background-color: transparent");
+        this.db.getAll().forEach(item -> {
+            listView.getItems().add(item);
+        });
 
-        for (int i = 1; i <= 10; i++) {
 
-            listView.getItems().add("Item[" + i + "]");
-        }
         listView.setMaxHeight(250);
         listView.setMaxWidth(200);
 
