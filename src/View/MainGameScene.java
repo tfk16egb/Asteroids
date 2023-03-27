@@ -8,16 +8,17 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static View.AsteroidsApplication.*;
 
-public class MainGameScene{
+public class MainGameScene {
 
     private GameController controller;
     private Scene gameScene;
-    private Pane  gamePane;
+    private Pane gamePane;
     private Text text;
     private AtomicInteger points;
 
@@ -25,10 +26,11 @@ public class MainGameScene{
         gamePane.getChildren().removeAll(nodesToRemove);
     }
 
-    public void onAddObjects(List<Node> nodesToAdd){
+    public void onAddObjects(List<Node> nodesToAdd) {
         nodesToAdd.forEach(node -> gamePane.getChildren().add(node));
     }
-    public MainGameScene(GameController controller){
+
+    public MainGameScene(GameController controller) {
         gamePane = new Pane();
         text = new Text(10, 20, "Score: 0");
         text.setFill(Color.WHITE);
@@ -49,7 +51,7 @@ public class MainGameScene{
         gameScene = new Scene(gamePane);
     }
 
-    public void startAnimation(){
+    public void startAnimation() {
         Map<KeyCode, Boolean> pressedKeys = new HashMap<>();
 
         gameScene.setOnKeyPressed(event -> {
@@ -63,18 +65,19 @@ public class MainGameScene{
         new AnimationTimer() {
             long lastShotTime = 0;
             int shotsFired = 0; // added counter
+
             @Override
             public void handle(long now) {
 
-                if(pressedKeys.getOrDefault(KeyCode.LEFT, false)) {
+                if (pressedKeys.getOrDefault(KeyCode.LEFT, false)) {
                     controller.getShip().turnLeft();
                 }
 
-                if(pressedKeys.getOrDefault(KeyCode.RIGHT, false)) {
+                if (pressedKeys.getOrDefault(KeyCode.RIGHT, false)) {
                     controller.getShip().turnRight();
                 }
 
-                if(pressedKeys.getOrDefault(KeyCode.UP, false)) {
+                if (pressedKeys.getOrDefault(KeyCode.UP, false)) {
                     controller.getShip().accelerate();
                 }
 
@@ -99,8 +102,8 @@ public class MainGameScene{
 
                 controller.addAsteroidAtRandom();
 
-                if(controller.gameOver()){
-                    Text gameOverText = new Text( 50, 200, "GAME OVER\nScore: " + points);
+                if (controller.gameOver()) {
+                    Text gameOverText = new Text(50, 200, "GAME OVER\nScore: " + points);
                     gameOverText.setStyle("-fx-font-size: 100px");
 
 
@@ -112,7 +115,7 @@ public class MainGameScene{
         }.start();
     }
 
-    public Scene getScene(){
+    public Scene getScene() {
         return gameScene;
     }
 

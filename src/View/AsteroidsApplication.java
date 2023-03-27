@@ -1,6 +1,7 @@
 package View;
 
 import Controller.GameController;
+import Model.BackgroundImageConverter;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -17,12 +18,18 @@ public class AsteroidsApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-
-        MainGameScene mainGame = new MainGameScene(controller);
-        mainGame.startAnimation();
+        BackgroundImageConverter bImgConverter =
+                new BackgroundImageConverter(WIDTH, HEIGHT,
+                        "startscreen.png",
+                        "playgame.png",
+                        "scoreboard.png");
+        //MainGameScene mainGame = new MainGameScene(controller);
+        //mainGame.startAnimation();
+        MenuScene menuScene = new MenuScene(stage, bImgConverter);
 
         stage.setTitle("Asteroids!");
-        stage.setScene(mainGame.getScene());
+        //stage.setScene(mainGame.getScene());
+        stage.setScene(menuScene.getScene());
         stage.show();
     }
 
