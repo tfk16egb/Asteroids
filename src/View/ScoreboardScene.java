@@ -20,7 +20,12 @@ public class ScoreboardScene {
     public ScoreboardScene(Stage stage, BackgroundImageConverter bImgConverter) {
         this.stage = stage;
         Button backToMenu = new Button("Back");
+        //backToMenu.setFont(FONT);
+
+
         ListView listView = new ListView<>();
+        listView.setStyle("-fx-background-color: transparent");
+
         for (int i = 1; i <= 10; i++) {
 
             listView.getItems().add("Item[" + i + "]");
@@ -34,7 +39,7 @@ public class ScoreboardScene {
         borderPane.setCenter(listView);
         borderPane.setBackground(bImgConverter.getBackground("scoreboard.png"));
         scene = new Scene(borderPane, WIDTH, HEIGHT);
-        scene.getStylesheets().add("style/Scoreboard.css");
+        scene.getStylesheets().add("style/scoreboard.css");
 
         backToMenu.setOnAction(e -> switchScene(new MenuScene(stage, bImgConverter).getScene()));
     }
