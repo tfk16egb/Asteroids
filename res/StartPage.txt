@@ -1,3 +1,6 @@
+package View;
+
+import Model.BackgroundImageConverter;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -42,14 +45,14 @@ public class StartPage extends Application {
         mainMenuBtn_2.setOnAction(e -> primaryStage.setScene(mainScene));
         startBtn.setOnAction(e -> primaryStage.setScene(playScene));
         scoreBtn.setOnAction(e -> primaryStage.setScene(scoreScene));
-        playGameBtn.setOnAction(e -> {
+        /*playGameBtn.setOnAction(e -> {
             try {
                 new AsteroidsApplication().start(new Stage());
 
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
-        });
+        });*/
 
 
         primaryStage.setTitle("Asteroid Shooter");
