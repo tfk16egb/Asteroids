@@ -1,6 +1,5 @@
 package View;
 
-import Controller.GameController;
 import Model.BackgroundImageConverter;
 import javafx.geometry.Insets;
 import javafx.scene.*;
@@ -12,26 +11,30 @@ import static View.AsteroidsApplication.*;
 
 public class MenuScene {
     private Stage stage;
-    private Scene menuScene;
-    private GridPane menuPane;
+    private Scene scene;
+    private GridPane gridPane;
+
 
     public MenuScene(Stage stage, BackgroundImageConverter bImgConverter) {
         this.stage = stage;
         Button start = new Button("START");
         Button scoreboard = new Button("Score");
-        menuPane = new GridPane();
-        menuPane.setHgap(10);
-        menuPane.setVgap(10);
-        menuPane.setPadding(new Insets(0,10,0,10));
-        menuPane.add(start,20,20);
-        menuPane.add(scoreboard,20,25);
-        menuPane.setBackground(bImgConverter.getBackground("startscreen.png"));
-        menuScene = new Scene(menuPane,WIDTH, HEIGHT );
+        gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(0,10,0,10));
+        gridPane.add(start,20,20);
+        gridPane.add(scoreboard,20,25);
+        gridPane.setBackground(bImgConverter.getBackground("startscreen.png"));
+        scene = new Scene(gridPane,WIDTH, HEIGHT );
 
         start.setOnAction(e -> {
-            MainGameScene mainGame = new MainGameScene(new GameController());
-            switchScene(mainGame.getScene());
-            mainGame.startAnimation();
+            InsertNameScene insertNameScene = new InsertNameScene(stage, bImgConverter);
+            switchScene(insertNameScene.getScene());
+        });
+        scoreboard.setOnAction(e ->{
+            ScoreboardScene scoreboardScene = new ScoreboardScene(stage, bImgConverter);
+            switchScene(scoreboardScene.getScene());
         });
     }
 
@@ -40,6 +43,6 @@ public class MenuScene {
     }
 
     public Scene getScene(){
-        return this.menuScene;
+        return this.scene;
     }
 }
