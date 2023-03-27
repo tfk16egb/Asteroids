@@ -8,9 +8,9 @@ import javafx.scene.shape.Shape;
 public class Ship extends Character {
 
     public Ship(int x, int y) {
-        super(new Polygon(-5, -5, 10, 0, -5, 5), x, y);
+        super(new Polygon(-10, -10, 20, 0, -10, 10), x, y);
         Polygon polygon = getPolygon();
-        polygon.setFill(Color.WHITE);
+        polygon.setStyle("-fx-fill: black; -fx-stroke: white; -fx-stroke-width: 2;");
         setPolygon(polygon);
     }
 

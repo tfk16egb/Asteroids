@@ -29,7 +29,7 @@ public class MenuScene {
         menuScene = new Scene(menuPane,WIDTH, HEIGHT );
 
         start.setOnAction(e -> {
-            MainGameScene mainGame = new MainGameScene(new GameController());
+            MainGameScene mainGame = new MainGameScene(new GameController(), stage);
             switchScene(mainGame.getScene());
             mainGame.startAnimation();
         });

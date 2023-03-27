@@ -1,13 +1,18 @@
 package View;
 
 import Controller.GameController;
+import Model.BackgroundImageConverter;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -21,19 +26,26 @@ public class MainGameScene {
     private Pane gamePane;
     private Text text;
     private AtomicInteger points;
+    private static Font font = Font.loadFont("file:res/retro_computer_personal_use.ttf", 40);
+    private Stage stage;
 
     private void onCollidedObjectsChanged(List<Node> nodesToRemove) {
         gamePane.getChildren().removeAll(nodesToRemove);
     }
 
     public void onAddObjects(List<Node> nodesToAdd) {
-        nodesToAdd.forEach(node -> gamePane.getChildren().add(node));
+        nodesToAdd.forEach(node -> {
+            gamePane.getChildren().add(node);
+        });
+        text.toFront();
     }
 
-    public MainGameScene(GameController controller) {
+    public MainGameScene(GameController controller, Stage stage) {
+        this.stage = stage;
         gamePane = new Pane();
-        text = new Text(10, 20, "Score: 0");
-        text.setFill(Color.WHITE);
+        text = new Text(30, 60, "0");
+        text.setFill(Color.GREY);
+        text.setFont(font);
         points = new AtomicInteger();
         this.controller = controller;
         controller.setCollisionCallback(this::onCollidedObjectsChanged);
@@ -49,6 +61,7 @@ public class MainGameScene {
         controller.addAllProjectiles();
 
         gameScene = new Scene(gamePane);
+
     }
 
     public void startAnimation() {
@@ -94,7 +107,7 @@ public class MainGameScene {
                 controller.moveProjectile();
 
                 points.addAndGet(controller.calculateScore());
-                text.setText("Points: " + points.intValue());
+                text.setText("" + points.intValue());
 
 
                 controller.removeProjectileThatHitAstroids();
@@ -103,16 +116,63 @@ public class MainGameScene {
                 controller.addAsteroidAtRandom();
 
                 if (controller.gameOver()) {
-                    Text gameOverText = new Text(50, 200, "GAME OVER\nScore: " + points);
-                    gameOverText.setStyle("-fx-font-size: 100px");
-
-
-                    gameOverText.setFill(Color.RED);
+                    Text restart = new Text(130, 380, "PRESS R TO RESTART\nPRESS B FOR MAIN MENU");
+                    Text gameOverText = new Text(130, 250, "GAME OVER\nScore: " + points);
+                    gameOverText.setFont(font);
+                    gameOverText.setStyle("-fx-font-size: 55px");
+                    gameOverText.setFill(Color.WHITE);
+                    restart.setFont(font);
+                    restart.setStyle("-fx-font-size: 25px");
+                    restart.setFill(Color.WHITE);
                     gamePane.getChildren().add(gameOverText);
+                    gamePane.getChildren().add(restart);
                     stop();
+                    gameOverAnimation();
                 }
             }
         }.start();
+    }
+
+    private void gameOverAnimation(){
+        new AnimationTimer(){
+            @Override
+            public void handle(long now) {
+                gameScene.setOnKeyPressed(event -> {
+                    if (event.getCode() == KeyCode.R) {
+                        startAnimation();
+                        initGame();
+                        stop();
+                    }
+                });
+                gameScene.setOnKeyPressed(event -> {
+                    if (event.getCode() == KeyCode.B) {
+                        BackgroundImageConverter bImgConverter =
+                                new BackgroundImageConverter(WIDTH, HEIGHT,
+                                        "startscreen.png",
+                                        "playgame.png",
+                                        "scoreboard.png");
+                        switchScene(new MenuScene(stage, bImgConverter).getScene());
+                    }
+                });
+            }
+        }.start();
+    }
+
+    public void initGame(){
+        gamePane.getChildren().clear();
+        controller = new GameController();
+        controller.setCollisionCallback(this::onCollidedObjectsChanged);
+        controller.setAddObjectCallback(this::onAddObjects);
+        controller.removeProjectiles();
+        gamePane.getChildren().add(controller.getShip().getNode());
+        gamePane.getChildren().add(text);
+        controller.addAllProjectiles();
+        points.set(0);
+        text.setText("");
+    }
+
+    public void switchScene(Scene scene){
+        stage.setScene(scene);
     }
 
     public Scene getScene() {

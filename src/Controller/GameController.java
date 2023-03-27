@@ -210,11 +210,9 @@ public class GameController {
                 if(projectile.collide(asteroid)) {
                     projectile.setAlive(false);
                     asteroid.setAlive(false);
+                    score.addAndGet(asteroid.getSize().getScoreValue());
                 }
             });
-            if(!projectile.isAlive()) {
-                score.addAndGet(100);
-            }
         });
 
         return score.intValue();

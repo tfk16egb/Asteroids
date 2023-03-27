@@ -30,6 +30,7 @@ public class AsteroidsApplication extends Application {
         stage.setTitle("Asteroids!");
         //stage.setScene(mainGame.getScene());
         stage.setScene(menuScene.getScene());
+        stage.setResizable(false);
         stage.show();
     }
 
