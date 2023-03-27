@@ -29,10 +29,10 @@ ni arbetar i grupp av tre måste ni ha minst två extra features.
 
 ** VALDA EXTRA FEATURES
 
-- [ ] Asteroider har ingen predefinierad form. Formen slumpas fram när en asteroid skapas
-- [ ] Om ett skott träffar en asteroid slits den upp i flera små mindre asteroider som rör
+- [X] Asteroider har ingen predefinierad form. Formen slumpas fram när en asteroid skapas
+- [X] Om ett skott träffar en asteroid slits den upp i flera små mindre asteroider som rör
       sig åt olika håll
-- [ ] När en asteroid träffas, exploderar den (simulera med någon visuell effekt)
+- [X] När en asteroid träffas, exploderar den (simulera med någon visuell effekt)
 - [ ] Lägg till ytterligare en eller flera levels. Man kommer till nästa level när alla asteroider 
       är rensade. Nästa level ska vara svårare (t ex asteroiderna rör sig snabbare,
       de är fler, det finns flera hinder och faror, etc).
