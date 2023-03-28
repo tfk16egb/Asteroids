@@ -1,16 +1,14 @@
 .list-cell{
     -fx-background-color: transparent;
     -fx-text-fill: WHITE;
-    -fx-underline: true;
+    -fx-font-size: 16px;
     -fx-font-family: "Courier New";
+    -fx-font-weight: bold;
 
 
 }
 .list-view{
     -fx-background-color: transparent;
-}
-.list-view .scroll-bar:vertical {
-    -fx-scale-x: 0;
 }
 
 .button{

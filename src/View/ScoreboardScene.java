@@ -34,22 +34,24 @@ public class ScoreboardScene {
 
         List<JSONObject> list = IntStream
                 .range(0, db.getAll().size())
-                .filter(idx -> idx <= 10)
+                .filter(idx -> idx <= 9)
                 .mapToObj(i -> db.getAll().get(i))
                 .collect(Collectors.toList());
 
         ListView listView = new ListView();
         for(JSONObject json: list){
-            listView.getItems().add(json.get("Points") + ": " + json.get("Name"));
+            listView.getItems().add((list.indexOf(json) + 1) + "# " + json.get("Points") + ": " + json.get("Name"));
         }
 
-        listView.setMaxHeight(250);
-        listView.setMaxWidth(300);
+        listView.setMaxHeight(300);
+        listView.setMaxWidth(250);
 
 
         borderPane = new BorderPane();
         borderPane.setLeft(backToMenu);
+
         borderPane.setCenter(listView);
+        listView.setTranslateY(20);
         borderPane.setBackground(bImgConverter.getBackground("scoreboard.png"));
         scene = new Scene(borderPane, WIDTH, HEIGHT);
         scene.getStylesheets().add("Scoreboard.css");
