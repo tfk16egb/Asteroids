@@ -12,6 +12,11 @@ import static View.AsteroidsApplication.*;
 import javafx.stage.Stage;
 import org.json.simple.JSONObject;
 
+import java.beans.Expression;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 public class ScoreboardScene {
     private final Stage stage;
 
@@ -28,12 +33,16 @@ public class ScoreboardScene {
 
 
 
-        ListView listView = new ListView<>();
-        db.getAll().forEach(json -> {
+        List<JSONObject> list = IntStream
+                .range(0, db.getAll().size())
+                .filter(idx -> idx <= 10)
+                .mapToObj(i -> db.getAll().get(i))
+                .collect(Collectors.toList());
+
+        ListView listView = new ListView();
+        for(JSONObject json: list){
             listView.getItems().add(json.get("Points") + ": " + json.get("Name"));
-        });
-
-
+        }
 
         listView.setMaxHeight(250);
         listView.setMaxWidth(300);

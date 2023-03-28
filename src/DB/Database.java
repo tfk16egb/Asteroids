@@ -77,11 +77,7 @@ public class Database {
 
     public List<JSONObject> getScoreboard() {
         reloadDatabase();
-        JSONArray scoreboard = new JSONArray();
-        for(int i = 1; i <= 10; i++){
-            scoreboard.add(existingObjects.get(i));
-        }
-        return scoreboard;
+        return existingObjects;
     }
 
 

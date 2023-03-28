@@ -1,6 +1,7 @@
 package Controller;
 
 import DB.Database;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class DatabaseController {
     }
 
     public List<JSONObject> getAll(){
+
         return db.getScoreboard();
     }
 
