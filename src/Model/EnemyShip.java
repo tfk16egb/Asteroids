@@ -6,11 +6,15 @@ import javafx.scene.shape.Polygon;
 
 public class EnemyShip extends Character {
 
+    long lastShotTime;
+
     public EnemyShip(int x, int y) {
         super(new Polygon(-10, -10, 20, 0, -10, 10), x, y);
         Polygon polygon = getPolygon();
         polygon.setStyle("-fx-fill: black; -fx-stroke: red; -fx-stroke-width: 2;");
         setPolygon(polygon);
+
+        lastShotTime = 0L;
     }
     public void followShip(Ship ship) {
         Point2D toShip = new Point2D(
@@ -21,5 +25,13 @@ public class EnemyShip extends Character {
         setMovement(direction);
         double angle = Math.atan2(toShip.getY(), toShip.getX()) * 180 / Math.PI;
         getCharacter().setRotate(angle);
+    }
+
+    public long getLastShotTime() {
+        return lastShotTime;
+    }
+
+    public void setLastShotTime(long lastShotTime) {
+        this.lastShotTime = lastShotTime;
     }
 }

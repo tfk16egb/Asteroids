@@ -85,7 +85,7 @@ public class MainGameScene {
                     controller.addEnemyShipAtRandom();
                 });
             }
-        }, 1_000, 1_000);
+        }, 5_000, 5_000);
 
         new AnimationTimer() {
             long lastShotTime = 0;
@@ -116,23 +116,23 @@ public class MainGameScene {
                     shotsFired = 0;
                 }
 
+                controller.moveEnemies();
+
                 controller.getShip().move();
                 controller.moveAsteroid();
                 controller.moveProjectile();
-                controller.moveEnemies();
 
-                for(int i = 0; i < controller.getEnemyProjectileSize(); i++){
-                    if (now - lastShotTime >= COOLDOWN_PERIOD && shotsFired < MAX_PROJECTILES) {
-                        controller.shootEnemyProjectiles(i);
-                        lastShotTime = now;
-                        shotsFired++;
-                    }
+
+                for(int i = 0; i < controller.getEnemySize(); i++){
+                    controller.shootEnemyProjectiles(i, now);
                 }
+
+                controller.moveEnemyProjectile();
 
                 points.addAndGet(controller.calculateScore());
                 text.setText(String.format("%05d", points.intValue()));
 
-
+                controller.expiredProjectiles();
                 controller.removeProjectileThatHitAstroids();
                 controller.updateParicle();
 

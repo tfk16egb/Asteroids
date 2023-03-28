@@ -95,6 +95,25 @@ public class GameController {
         enemyProjectiles.forEach(enemyProjectile -> enemyProjectile.move());
     }
 
+    public void expiredProjectiles(){
+        List<Node> nodesToRemove = new ArrayList<>();
+
+        if(enemyProjectiles.size() == 0){
+            return;
+        }
+
+        enemyProjectiles.stream()
+                .filter(projectile -> !projectile.isAlive())
+                .forEach(projectile -> nodesToRemove.add(projectile.getNode()));
+        enemyProjectiles.removeAll(enemyProjectiles.stream()
+                .filter(projectile -> !projectile.isAlive())
+                .collect(Collectors.toList()));
+
+        if (collisionCallback != null) {
+            collisionCallback.onCollidedObjectsChanged(nodesToRemove);
+        }
+    }
+
     public void addAllProjectiles(){
         List<Node> nodesToAdd = new ArrayList<>();
         asteroids.forEach(asteroid -> nodesToAdd.add(asteroid.getNode()));
@@ -198,14 +217,20 @@ public class GameController {
         }
     }
 
-    public int getEnemyProjectileSize(){
-        return enemyProjectiles.size();
+    public int getEnemySize(){
+        return enemyShips.size();
     }
 
-    public void shootEnemyProjectiles(int i){
+    public void shootEnemyProjectiles(int i, long now){
+        final long ENEMY_COOLDOWN_PERIOD = 1000_000_000;
         List<Node> nodesToAdd = new ArrayList<>();
-
         EnemyShip enemyShip = enemyShips.get(i);
+        if(!(now - enemyShip.getLastShotTime() >= ENEMY_COOLDOWN_PERIOD)){
+            return;
+        }
+
+        enemyShip.setLastShotTime(now);
+
         EnemyProjectile enemyProjectile = new EnemyProjectile((int) enemyShip.getCharacter().getTranslateX(), (int) enemyShip.getCharacter().getTranslateY());
         enemyProjectile.getCharacter().setRotate(enemyShip.getCharacter().getRotate());
         enemyProjectiles.add(enemyProjectile);
