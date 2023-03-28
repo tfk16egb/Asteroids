@@ -1,9 +1,8 @@
 package Controller;
 
 import DB.Database;
-import org.json.simple.parser.ParseException;
+import org.json.simple.JSONObject;
 
-import java.io.IOException;
 import java.util.List;
 
 public class DatabaseController {
@@ -13,31 +12,19 @@ public class DatabaseController {
     public DatabaseController() {
         this.db = Database.getInstance();
     }
+    public void registerPlayer(String name){
+        this.db.registerPlayer(name);
+    }
 
     public void save(String name, int points){
-        try {
-            db.save(name, points);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        db.save(name, points);
     }
-    public void setDatabasePath(String path){
-        try {
-            this.db.setDatabasePath(path);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
+    public List<JSONObject> getAll(){
+        return db.getScoreboard();
     }
-    public void printScoreboard(){
-        try {
-            this.db.printScoreboard();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    public List getAll(){
-        return db.getAll();
+
+    public String getRegisteredPlayer() {
+        return this.db.getRegisteredPlayer();
     }
 }

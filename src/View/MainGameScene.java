@@ -43,7 +43,7 @@ public class MainGameScene {
     public MainGameScene(GameController controller, Stage stage) {
         this.stage = stage;
         db = new DatabaseController();
-        db.setDatabasePath("example.json");
+
         gamePane = new Pane();
         text = new Text(30, 60, "0");
         text.setFill(Color.GREY);
@@ -121,7 +121,6 @@ public class MainGameScene {
                 if (controller.gameOver()) {
                     Text restart = new Text(130, 380, "PRESS R TO RESTART\nPRESS B FOR MAIN MENU");
                     Text gameOverText = new Text(130, 250, "GAME OVER\nScore: " + points);
-                    db.save("User_name", points.intValue());
                     gameOverText.setFont(font);
                     gameOverText.setStyle("-fx-font-size: 55px");
                     gameOverText.setFill(Color.WHITE);
@@ -131,6 +130,7 @@ public class MainGameScene {
                     gamePane.getChildren().add(gameOverText);
                     gamePane.getChildren().add(restart);
                     stop();
+                    db.save(db.getRegisteredPlayer(), points.intValue());
                     gameOverAnimation();
                 }
             }

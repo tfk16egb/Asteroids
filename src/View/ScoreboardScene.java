@@ -10,6 +10,7 @@ import javafx.scene.layout.BorderPane;
 import static View.AsteroidsApplication.*;
 
 import javafx.stage.Stage;
+import org.json.simple.JSONObject;
 
 public class ScoreboardScene {
     private final Stage stage;
@@ -28,14 +29,14 @@ public class ScoreboardScene {
 
 
         ListView listView = new ListView<>();
-        listView.setStyle("-fx-background-color: transparent");
-        this.db.getAll().forEach(item -> {
-            listView.getItems().add(item);
+        db.getAll().forEach(json -> {
+            listView.getItems().add(json.get("Points") + ": " + json.get("Name"));
         });
 
 
+
         listView.setMaxHeight(250);
-        listView.setMaxWidth(200);
+        listView.setMaxWidth(300);
 
 
         borderPane = new BorderPane();
@@ -43,7 +44,7 @@ public class ScoreboardScene {
         borderPane.setCenter(listView);
         borderPane.setBackground(bImgConverter.getBackground("scoreboard.png"));
         scene = new Scene(borderPane, WIDTH, HEIGHT);
-        scene.getStylesheets().add("style/scoreboard.css");
+        scene.getStylesheets().add("Scoreboard.css");
 
         backToMenu.setOnAction(e -> switchScene(new MenuScene(stage, bImgConverter).getScene()));
     }
