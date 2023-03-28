@@ -122,6 +122,31 @@ public class GameController {
         }
     }
 
+    public void removeEnemyShipsThatGotHit(){
+        List<Node> nodesToRemove = new ArrayList<>();
+        List<EnemyShip> shipsToRemove = new ArrayList<>();
+
+        projectiles.stream()
+                .filter(projectile -> projectile.isAlive())
+                .forEach(projectile -> {
+                    nodesToRemove.add(projectile.getNode());
+                    shipsToRemove.addAll(enemyShips.stream()
+                            .filter(enemyShip -> enemyShip.collide(projectile))
+                            .collect(Collectors.toList()));
+                });
+        projectiles.removeAll(projectiles.stream()
+                .filter(projectile -> !projectile.isAlive())
+                .collect(Collectors.toList()));
+
+        shipsToRemove.forEach(enemyShip -> {
+            nodesToRemove.add(enemyShip.getNode());
+        });
+        enemyShips.removeAll(shipsToRemove);
+
+        if (collisionCallback != null) {
+            collisionCallback.onCollidedObjectsChanged(nodesToRemove);
+        }
+    }
     public void removeProjectileThatHitAstroids(){
         List<Node> nodesToRemove = new ArrayList<>();
         List<Asteroid> asteroidToAdd = new ArrayList<>();
@@ -272,6 +297,16 @@ public class GameController {
                 gameOver.set(true);
             }
         });
+        enemyShips.forEach(enemyShip -> {
+            if (ship.collide(enemyShip)) {
+                gameOver.set(true);
+            }
+        });
+        enemyProjectiles.forEach(enemyProjectile -> {
+            if (ship.collide(enemyProjectile)) {
+                gameOver.set(true);
+            }
+        });
 
         return gameOver.get();
     }
@@ -319,6 +354,8 @@ public class GameController {
             collisionCallback.onCollidedObjectsChanged(nodesToRemove);
         }
     }
+
+
 
     public void setCollisionCallback(CollidedObjectCallback callback) {
         this.collisionCallback = callback;

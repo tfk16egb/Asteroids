@@ -121,10 +121,10 @@ public class MainGameScene {
                 controller.getShip().move();
                 controller.moveAsteroid();
                 controller.moveProjectile();
-
+                controller.removeEnemyShipsThatGotHit();
 
                 for(int i = 0; i < controller.getEnemySize(); i++){
-                    controller.shootEnemyProjectiles(i, now);
+                    //controller.shootEnemyProjectiles(i, now);
                 }
 
                 controller.moveEnemyProjectile();
