@@ -85,7 +85,7 @@ public class MainGameScene {
                     controller.addEnemyShipAtRandom();
                 });
             }
-        }, 5_000, 5_000);
+        }, 15_000, 15_000);
 
         new AnimationTimer() {
             long lastShotTime = 0;
@@ -121,10 +121,9 @@ public class MainGameScene {
                 controller.getShip().move();
                 controller.moveAsteroid();
                 controller.moveProjectile();
-                controller.removeEnemyShipsThatGotHit();
 
                 for(int i = 0; i < controller.getEnemySize(); i++){
-                    //controller.shootEnemyProjectiles(i, now);
+                    controller.shootEnemyProjectiles(i, now);
                 }
 
                 controller.moveEnemyProjectile();
@@ -132,11 +131,11 @@ public class MainGameScene {
                 points.addAndGet(controller.calculateScore());
                 text.setText(String.format("%05d", points.intValue()));
 
-                controller.expiredProjectiles();
+                controller.enemyShipCollisions();
                 controller.removeProjectileThatHitAstroids();
                 controller.updateParicle();
 
-                //controller.addAsteroidAtRandom();
+                controller.addAsteroidAtRandom();
 
                 if (controller.gameOver()) {
                     Text restart = new Text(130, 380, "PRESS R TO RESTART\nPRESS B FOR MAIN MENU");

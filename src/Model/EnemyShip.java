@@ -7,6 +7,7 @@ import javafx.scene.shape.Polygon;
 public class EnemyShip extends Character {
 
     long lastShotTime;
+    private boolean isAlive;
 
     public EnemyShip(int x, int y) {
         super(new Polygon(-10, -10, 20, 0, -10, 10), x, y);
@@ -15,6 +16,7 @@ public class EnemyShip extends Character {
         setPolygon(polygon);
 
         lastShotTime = 0L;
+        setAlive(true);
     }
     public void followShip(Ship ship) {
         Point2D toShip = new Point2D(
@@ -34,4 +36,13 @@ public class EnemyShip extends Character {
     public void setLastShotTime(long lastShotTime) {
         this.lastShotTime = lastShotTime;
     }
+
+    public boolean isAlive() {
+        return isAlive;
+    }
+
+    public void setAlive(boolean alive) {
+        isAlive = alive;
+    }
+
 }
