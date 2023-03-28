@@ -45,7 +45,7 @@ public class AsteroidsApplication extends Application {
         List<Asteroid> asteroids = new ArrayList<>();
         List<Projectile> projectiles = new ArrayList<>();
         List<EnemyShip> enemyShips = new ArrayList<>();
-        List<Projectile> enemyProjectiles = new ArrayList<>();
+        List<EnemyProjectile> enemyProjectiles = new ArrayList<>();
 
 
 
@@ -109,12 +109,16 @@ public class AsteroidsApplication extends Application {
                     EnemyShip enemyShip = new EnemyShip(rand.nextInt(HEIGHT), rand.nextInt(WIDTH));
                     enemyShips.add(enemyShip);
                     pane.getChildren().add(enemyShip.getCharacter());
+
                 });
             }
         }, 5_000, 5_000);
 
         new AnimationTimer() {
-
+            long lastShotTime = 0;
+            final long COOLDOWN_PERIOD = 300_000_000; // 150 milliseconds in nanoseconds
+            final int MAX_PROJECTILES = 4;
+            int shotsFired = 0;
             @Override
             public void handle(long now) {
 
@@ -144,11 +148,27 @@ public class AsteroidsApplication extends Application {
                 }
                 enemyShips.forEach(enemyShip -> {
                     enemyShip.followShip(ship);
+
                     enemyShip.move();
                 });
+                for (EnemyShip enemyShip : enemyShips) {
+
+                    if (now - lastShotTime >= COOLDOWN_PERIOD && shotsFired < MAX_PROJECTILES) {
+                        EnemyProjectile enemyProjectile = new EnemyProjectile((int) enemyShip.getCharacter().getTranslateX(), (int) enemyShip.getCharacter().getTranslateY());
+                        enemyProjectile.getCharacter().setRotate(enemyShip.getCharacter().getRotate());
+                        enemyProjectiles.add(enemyProjectile);
+
+                        enemyProjectile.accelerate();
+                        enemyProjectile.setMovement(enemyProjectile.getMovement().normalize().multiply(5));
+                        pane.getChildren().add(enemyProjectile.getCharacter());
+                        lastShotTime = now;
+                        shotsFired++;
+                    }
+                }
                 ship.move();
                 asteroids.forEach(asteroid -> asteroid.move());
                 projectiles.forEach(projectile -> projectile.move());
+                enemyProjectiles.forEach(enemyProjectile -> enemyProjectile.move());
                 projectiles.forEach(projectile -> {
                     asteroids.forEach(asteroid -> {
                         if(projectile.collide(asteroid)) {
