@@ -12,7 +12,6 @@ import static View.AsteroidsApplication.*;
 import javafx.stage.Stage;
 import org.json.simple.JSONObject;
 
-import java.beans.Expression;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
