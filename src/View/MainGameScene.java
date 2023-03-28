@@ -1,5 +1,6 @@
 package View;
 
+import Controller.DatabaseController;
 import Controller.GameController;
 import Model.BackgroundImageConverter;
 import Model.EnemyShip;
@@ -24,6 +25,7 @@ import static View.AsteroidsApplication.*;
 public class MainGameScene {
 
     private GameController controller;
+    private DatabaseController db;
     private Scene gameScene;
     private Pane gamePane;
     private Text text;
@@ -44,6 +46,8 @@ public class MainGameScene {
 
     public MainGameScene(GameController controller, Stage stage) {
         this.stage = stage;
+        db = new DatabaseController();
+
         gamePane = new Pane();
         text = new Text(30, 60, "0");
         text.setFill(Color.GREY);
@@ -150,6 +154,7 @@ public class MainGameScene {
                     gamePane.getChildren().add(gameOverText);
                     gamePane.getChildren().add(restart);
                     stop();
+                    db.save(db.getRegisteredPlayer(), points.intValue());
                     enemySpawnTimer.cancel();
                     gameOverAnimation();
                 }

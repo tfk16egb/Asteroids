@@ -50,7 +50,7 @@ public class GameController {
         }
     }
 
-    public void updateParicle(){
+    public void updateParticle(){
         List<Node> nodesToRemove = new ArrayList<>();
 
         for(int i = 0; i < particles.size(); i++){
