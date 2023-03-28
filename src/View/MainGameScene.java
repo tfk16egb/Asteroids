@@ -138,7 +138,7 @@ public class MainGameScene {
 
                 controller.expiredProjectiles();
                 controller.removeProjectileThatHitAstroids();
-                controller.updateParicle();
+                controller.updateParticle();
 
                 //controller.addAsteroidAtRandom();
 
