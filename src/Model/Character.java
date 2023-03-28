@@ -1,6 +1,7 @@
 package Model;
 
 import View.AsteroidsApplication;
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Polygon;
@@ -50,24 +51,28 @@ public abstract class Character {
     }
 
     public void move() {
-        this.character.setTranslateX(this.character.getTranslateX() + this.movement.getX());
-        this.character.setTranslateY(this.character.getTranslateY() + this.movement.getY());
+        Bounds bounds = character.getBoundsInParent();
+        double x = character.getTranslateX() + movement.getX();
+        double y = character.getTranslateY() + movement.getY();
 
-        if (this.character.getTranslateX() < 0) {
-            this.character.setTranslateX(this.character.getTranslateX() + AsteroidsApplication.HEIGHT);
+        double parentWidth = character.getParent().getLayoutBounds().getWidth();
+        double parentHeight = character.getParent().getLayoutBounds().getHeight();
+
+        if (x + bounds.getWidth() < 0) {
+            x = parentWidth;
+        }
+        if (x - bounds.getWidth() > parentWidth) {
+            x = -bounds.getWidth();
+        }
+        if (y + bounds.getHeight() < 0) {
+            y = parentHeight;
+        }
+        if (y  - bounds.getHeight() > parentHeight) {
+            y = -bounds.getHeight();
         }
 
-        if (this.character.getTranslateX() > AsteroidsApplication.HEIGHT) {
-            this.character.setTranslateX(this.character.getTranslateX() % AsteroidsApplication.HEIGHT);
-        }
-
-        if (this.character.getTranslateY() < 0) {
-            this.character.setTranslateY(this.character.getTranslateY() + AsteroidsApplication.WIDTH);
-        }
-
-        if (this.character.getTranslateY() > AsteroidsApplication.WIDTH) {
-            this.character.setTranslateY(this.character.getTranslateY() % AsteroidsApplication.WIDTH);
-        }
+        character.setTranslateX(x);
+        character.setTranslateY(y);
     }
 
     public void accelerate() {

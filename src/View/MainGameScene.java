@@ -2,7 +2,9 @@ package View;
 
 import Controller.GameController;
 import Model.BackgroundImageConverter;
+import Model.EnemyShip;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -74,6 +76,16 @@ public class MainGameScene {
         gameScene.setOnKeyReleased(event -> {
             pressedKeys.put(event.getCode(), Boolean.FALSE);
         });
+        Timer enemySpawnTimer = new Timer();
+
+        enemySpawnTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    controller.addEnemyShipAtRandom();
+                });
+            }
+        }, 1_000, 1_000);
 
         new AnimationTimer() {
             long lastShotTime = 0;
@@ -103,18 +115,28 @@ public class MainGameScene {
                 } else {
                     shotsFired = 0;
                 }
+
                 controller.getShip().move();
                 controller.moveAsteroid();
                 controller.moveProjectile();
+                controller.moveEnemies();
+
+                for(int i = 0; i < controller.getEnemyProjectileSize(); i++){
+                    if (now - lastShotTime >= COOLDOWN_PERIOD && shotsFired < MAX_PROJECTILES) {
+                        controller.shootEnemyProjectiles(i);
+                        lastShotTime = now;
+                        shotsFired++;
+                    }
+                }
 
                 points.addAndGet(controller.calculateScore());
-                text.setText("" + points.intValue());
+                text.setText(String.format("%05d", points.intValue()));
 
 
                 controller.removeProjectileThatHitAstroids();
                 controller.updateParicle();
 
-               // controller.addAsteroidAtRandom();
+                //controller.addAsteroidAtRandom();
 
                 if (controller.gameOver()) {
                     Text restart = new Text(130, 380, "PRESS R TO RESTART\nPRESS B FOR MAIN MENU");
@@ -128,6 +150,7 @@ public class MainGameScene {
                     gamePane.getChildren().add(gameOverText);
                     gamePane.getChildren().add(restart);
                     stop();
+                    enemySpawnTimer.cancel();
                     gameOverAnimation();
                 }
             }
@@ -177,7 +200,7 @@ public class MainGameScene {
         gamePane.getChildren().add(text);
         controller.addAllProjectiles();
         points.set(0);
-        text.setText("");
+        text.setText(String.format("%05d", points.intValue()));
     }
 
     public void switchScene(Scene scene){

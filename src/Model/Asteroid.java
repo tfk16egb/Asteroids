@@ -14,7 +14,7 @@ public class Asteroid extends Character {
     public Asteroid(int x, int y, PolygonFactory.AsteroidSize size) {
         super(new PolygonFactory().createPolygon(size), x, y);
         Polygon polygon = getPolygon();
-        polygon.setStyle("-fx-fill: black; -fx-stroke: white; -fx-stroke-width: 3;");
+        polygon.setStyle("-fx-fill: black; -fx-stroke: white; -fx-stroke-width: 2;");
         setPolygon(polygon);
         setAlive(true);
 

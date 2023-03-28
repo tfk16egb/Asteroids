@@ -6,9 +6,7 @@ import Observer.CollidedObjectCallback;
 import View.AsteroidsApplication;
 import javafx.scene.Node;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -20,6 +18,8 @@ public class GameController {
     List<Asteroid> asteroids = new ArrayList<>();
     List<Projectile> projectiles = new ArrayList<>();
     List<Particle> particles = new ArrayList<>();
+    List<EnemyShip> enemyShips = new ArrayList<>();
+    List<EnemyProjectile> enemyProjectiles = new ArrayList<>();
     Ship ship;
     private CollidedObjectCallback collisionCallback;
     private AddObjectCallback addCallback;
@@ -27,11 +27,13 @@ public class GameController {
     public GameController(){
         ship = new Ship(AsteroidsApplication.WIDTH / 2, HEIGHT / 2);
 
+        /*
         for (int i = 0; i < 8; i++) {
             Random rnd = new Random();
             Asteroid asteroid = new Asteroid(rnd.nextInt(WIDTH/3), rnd.nextInt(HEIGHT), PolygonFactory.AsteroidSize.LARGE);
             asteroids.add(asteroid);
         }
+        */
     }
 
     private void createParticles(int x, int y){
@@ -80,6 +82,17 @@ public class GameController {
 
     public void moveProjectile(){
         projectiles.forEach(projectile -> projectile.move());
+    }
+
+    public void moveEnemies(){
+        enemyShips.forEach(enemyShip -> {
+            enemyShip.followShip(ship);
+            enemyShip.move();
+        });
+    }
+
+    public void moveEnemyProjectile(){
+        enemyProjectiles.forEach(enemyProjectile -> enemyProjectile.move());
     }
 
     public void addAllProjectiles(){
@@ -149,6 +162,20 @@ public class GameController {
         }
     }
 
+    public void addEnemyShipAtRandom(){
+        List<Node> nodesToAdd = new ArrayList<>();
+        Random rand = new Random();
+
+        EnemyShip enemyShip = new EnemyShip(rand.nextInt(HEIGHT), rand.nextInt(WIDTH));
+        enemyShips.add(enemyShip);
+        nodesToAdd.add(enemyShip.getNode());
+
+
+        if(addCallback != null){
+            addCallback.onAddObjects(nodesToAdd);
+        }
+    }
+
     public void addAsteroidAtRandom(){
         List<Node> nodesToAdd = new ArrayList<>();
         List<PolygonFactory.AsteroidSize> asteroidSizes = new ArrayList<>();
@@ -165,6 +192,27 @@ public class GameController {
                 nodesToAdd.add(asteroid.getNode());
             }
         }
+
+        if(addCallback != null){
+            addCallback.onAddObjects(nodesToAdd);
+        }
+    }
+
+    public int getEnemyProjectileSize(){
+        return enemyProjectiles.size();
+    }
+
+    public void shootEnemyProjectiles(int i){
+        List<Node> nodesToAdd = new ArrayList<>();
+
+        EnemyShip enemyShip = enemyShips.get(i);
+        EnemyProjectile enemyProjectile = new EnemyProjectile((int) enemyShip.getCharacter().getTranslateX(), (int) enemyShip.getCharacter().getTranslateY());
+        enemyProjectile.getCharacter().setRotate(enemyShip.getCharacter().getRotate());
+        enemyProjectiles.add(enemyProjectile);
+        enemyProjectile.accelerate();
+        enemyProjectile.setMovement(enemyProjectile.getMovement().normalize().multiply(5));
+
+        nodesToAdd.add(enemyProjectile.getNode());
 
         if(addCallback != null){
             addCallback.onAddObjects(nodesToAdd);
