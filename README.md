@@ -22,6 +22,7 @@ https://java-programming.mooc.fi/part-14/3-larger-application-asteroids
 - [X] Dela in koden i olika Design-patterns
   - [X] Factory Method
   - [X] Observable
+  - [X] Singelton
 
 ## Extra features
 OBS! Om ni arbetar i par måste ni ha med åtminstone en av extra features nedan. Om
