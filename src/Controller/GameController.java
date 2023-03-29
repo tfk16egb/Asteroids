@@ -27,13 +27,12 @@ public class GameController {
     public GameController(){
         ship = new Ship(AsteroidsApplication.WIDTH / 2, HEIGHT / 2);
 
-        /*
         for (int i = 0; i < 8; i++) {
             Random rnd = new Random();
             Asteroid asteroid = new Asteroid(rnd.nextInt(WIDTH/3), rnd.nextInt(HEIGHT), PolygonFactory.AsteroidSize.LARGE);
             asteroids.add(asteroid);
         }
-        */
+
     }
 
     private void createParticles(int x, int y){
@@ -95,25 +94,6 @@ public class GameController {
         enemyProjectiles.forEach(enemyProjectile -> enemyProjectile.move());
     }
 
-    public void expiredProjectiles(){
-        List<Node> nodesToRemove = new ArrayList<>();
-
-        if(enemyProjectiles.size() == 0){
-            return;
-        }
-
-        enemyProjectiles.stream()
-                .filter(projectile -> !projectile.isAlive())
-                .forEach(projectile -> nodesToRemove.add(projectile.getNode()));
-        enemyProjectiles.removeAll(enemyProjectiles.stream()
-                .filter(projectile -> !projectile.isAlive())
-                .collect(Collectors.toList()));
-
-        if (collisionCallback != null) {
-            collisionCallback.onCollidedObjectsChanged(nodesToRemove);
-        }
-    }
-
     public void addAllProjectiles(){
         List<Node> nodesToAdd = new ArrayList<>();
         asteroids.forEach(asteroid -> nodesToAdd.add(asteroid.getNode()));
@@ -122,26 +102,45 @@ public class GameController {
         }
     }
 
-    public void removeEnemyShipsThatGotHit(){
+    public void enemyShipCollisions(){
         List<Node> nodesToRemove = new ArrayList<>();
-        List<EnemyShip> shipsToRemove = new ArrayList<>();
 
         projectiles.stream()
-                .filter(projectile -> projectile.isAlive())
-                .forEach(projectile -> {
-                    nodesToRemove.add(projectile.getNode());
-                    shipsToRemove.addAll(enemyShips.stream()
-                            .filter(enemyShip -> enemyShip.collide(projectile))
-                            .collect(Collectors.toList()));
-                });
+                .filter(projectile -> !projectile.isAlive())
+                .forEach(projectile -> nodesToRemove.add(projectile.getNode()));
         projectiles.removeAll(projectiles.stream()
                 .filter(projectile -> !projectile.isAlive())
                 .collect(Collectors.toList()));
 
-        shipsToRemove.forEach(enemyShip -> {
-            nodesToRemove.add(enemyShip.getNode());
+        enemyProjectiles.stream()
+                .filter(enemyProjectile -> !enemyProjectile.isAlive())
+                .forEach(enemyProjectile -> nodesToRemove.add(enemyProjectile.getNode()));
+        enemyProjectiles.removeAll(enemyProjectiles.stream()
+                .filter(enemyProjectile -> !enemyProjectile.isAlive())
+                .collect(Collectors.toList()));
+
+        enemyShips.stream()
+                .filter(enemyShip -> !enemyShip.isAlive())
+                .forEach(enemyShip -> {
+                    nodesToRemove.add(enemyShip.getNode());
+                    createParticles((int) enemyShip.getCharacter().getTranslateX(), (int) enemyShip.getCharacter().getTranslateY());
+                });
+
+
+        enemyShips.removeAll(enemyShips.stream()
+                .filter(enemyShip -> !enemyShip.isAlive())
+                .collect(Collectors.toList()));
+        projectiles.forEach(projectile -> {
+            List<EnemyShip> collisions = enemyShips.stream()
+                    .filter(enemyShip -> enemyShip.collide(projectile))
+                    .collect(Collectors.toList());
+
+            collisions.stream().forEach(collided -> {
+                enemyShips.remove(collided);
+                nodesToRemove.add(collided.getNode());
+            });
         });
-        enemyShips.removeAll(shipsToRemove);
+
 
         if (collisionCallback != null) {
             collisionCallback.onCollidedObjectsChanged(nodesToRemove);
@@ -228,7 +227,7 @@ public class GameController {
         asteroidSizes.add(PolygonFactory.AsteroidSize.SMALL);
         Random random = new Random();
 
-        if(Math.random() < 0.01) {
+        if(Math.random() < 0.001) {
             PolygonFactory.AsteroidSize size = asteroidSizes.get(random.nextInt(3));
             Asteroid asteroid = new Asteroid(WIDTH, HEIGHT, size);
             if(!asteroid.collide(ship)) {
@@ -319,6 +318,14 @@ public class GameController {
                     projectile.setAlive(false);
                     asteroid.setAlive(false);
                     score.addAndGet(asteroid.getSize().getScoreValue());
+                }
+            });
+            enemyShips.forEach(enemyShip -> {
+                final int ENEMY_SCORE = 500;
+                if (projectile.collide(enemyShip)) {
+                    projectile.setAlive(false);
+                    enemyShip.setAlive(false);
+                    score.addAndGet(ENEMY_SCORE);
                 }
             });
         });
