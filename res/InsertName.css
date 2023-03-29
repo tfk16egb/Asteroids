@@ -11,4 +11,5 @@
 }
 #mainMenu{
     -fx-text-fill: WHITE;
+    -fx-border-color: WHITE;
 }
