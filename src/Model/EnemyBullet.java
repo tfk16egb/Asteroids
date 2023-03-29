@@ -4,22 +4,22 @@ import View.AsteroidsApplication;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
-import static View.AsteroidsApplication.*;
 
-public class Projectile extends Character {
+import static View.AsteroidsApplication.HEIGHT;
 
+public class EnemyBullet extends Entity {
     private boolean isAlive;
     private double traveledDistance;
 
-    public Projectile(int x, int y) {
+    public EnemyBullet(int x, int y) {
         super(new Polygon(4, -2, 4, 2, -2, 2, -2, -2), x, y);
 
         Polygon polygon = getPolygon();
-        polygon.setFill(Color.LIGHTGREEN);
+        polygon.setFill(Color.ORANGERED);
         setAlive(true);
         traveledDistance = 0;
     }
+
 
     @Override
     public void move() {

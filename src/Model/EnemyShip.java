@@ -1,10 +1,9 @@
 package Model;
 
 import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
-public class EnemyShip extends Character {
+public class EnemyShip extends Entity {
 
     long lastShotTime;
     private boolean isAlive;

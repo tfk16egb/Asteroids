@@ -1,17 +1,16 @@
 package Model;
 
-import View.AsteroidsApplication;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 
-public abstract class Character {
+public abstract class Entity {
     private Polygon character;
     private Point2D movement;
 
-    public Character(Polygon polygon, int x, int y) {
+    public Entity(Polygon polygon, int x, int y) {
         this.character = polygon;
         this.character.setTranslateX(x);
         this.character.setTranslateY(y);
@@ -85,7 +84,7 @@ public abstract class Character {
         this.movement = this.movement.add(changeX, changeY);
     }
 
-    public boolean collide(Character other) {
+    public boolean collide(Entity other) {
         Shape collisionArea = Shape.intersect(this.character, other.getCharacter());
         return collisionArea.getBoundsInLocal().getWidth() != -1;
     }

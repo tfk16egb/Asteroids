@@ -1,12 +1,10 @@
 package Model;
 
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
-import java.awt.*;
 import java.util.Random;
 
-public class Asteroid extends Character {
+public class Asteroid extends Entity {
     private double rotationalMovement;
     private boolean isAlive;
     private PolygonFactory.AsteroidSize size;
@@ -27,9 +25,15 @@ public class Asteroid extends Character {
             accelerate();
         }
 
+        for(int i = 0; i < size.getAcceleration(); i++){
+            accelerate();
+        }
+
         this.size = size;
         this.rotationalMovement = 0.5 - rnd.nextDouble();
     }
+
+
 
     @Override
     public void move() {

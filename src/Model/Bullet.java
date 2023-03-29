@@ -5,21 +5,21 @@ import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
-import static View.AsteroidsApplication.HEIGHT;
+import static View.AsteroidsApplication.*;
 
-public class EnemyProjectile extends Character {
+public class Bullet extends Entity {
+
     private boolean isAlive;
     private double traveledDistance;
 
-    public EnemyProjectile(int x, int y) {
+    public Bullet(int x, int y) {
         super(new Polygon(4, -2, 4, 2, -2, 2, -2, -2), x, y);
 
         Polygon polygon = getPolygon();
-        polygon.setFill(Color.ORANGERED);
+        polygon.setFill(Color.LIGHTGREEN);
         setAlive(true);
         traveledDistance = 0;
     }
-
 
     @Override
     public void move() {

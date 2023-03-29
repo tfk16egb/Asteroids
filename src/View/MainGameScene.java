@@ -111,7 +111,7 @@ public class MainGameScene {
                 }
 
                 if (pressedKeys.getOrDefault(KeyCode.SPACE, false)) {
-                    if (now - lastShotTime >= COOLDOWN_PERIOD && shotsFired < MAX_PROJECTILES) {
+                    if (now - lastShotTime >= COOLDOWN_PERIOD && shotsFired < MAX_PROJECTILES && controller.getProjectileSize() <= 3) {
                         controller.shootProjectile();
                         lastShotTime = now;
                         shotsFired++;

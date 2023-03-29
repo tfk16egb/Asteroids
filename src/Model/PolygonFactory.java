@@ -6,18 +6,19 @@ import java.util.stream.DoubleStream;
 import javafx.scene.shape.Polygon;
 public class PolygonFactory {
     public enum AsteroidSize {
-        SMALL(10, 15, 100),
-        MEDIUM(15, 20, 50),
-        LARGE(25, 40, 20);
+        SMALL(10, 15, 100, 6),
+        MEDIUM(15, 20, 50, 4),
+        LARGE(25, 40, 20, 2);
 
         private int minSize;
         private int maxSize;
         private int scoreValue;
-
-        AsteroidSize(int minSize, int maxSize, int scoreValue) {
+        private int acceleration;
+        AsteroidSize(int minSize, int maxSize, int scoreValue, int acceleration) {
             this.minSize = minSize;
             this.maxSize = maxSize;
             this.scoreValue = scoreValue;
+            this.acceleration = acceleration;
         }
 
         public int getMinSize() {
@@ -29,6 +30,8 @@ public class PolygonFactory {
         }
 
         public int getScoreValue(){return scoreValue;}
+
+        public int getAcceleration(){return acceleration;}
     }
 
     public Polygon createPolygon(AsteroidSize size) {

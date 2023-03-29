@@ -1,6 +1,7 @@
 package Controller;
 
 import Model.*;
+import Model.Entity;
 import Observer.AddObjectCallback;
 import Observer.CollidedObjectCallback;
 import View.AsteroidsApplication;
@@ -16,10 +17,10 @@ import static View.AsteroidsApplication.*;
 public class GameController {
 
     List<Asteroid> asteroids = new ArrayList<>();
-    List<Projectile> projectiles = new ArrayList<>();
+    List<Bullet> bullets = new ArrayList<>();
     List<Particle> particles = new ArrayList<>();
     List<EnemyShip> enemyShips = new ArrayList<>();
-    List<EnemyProjectile> enemyProjectiles = new ArrayList<>();
+    List<EnemyBullet> enemyBullets = new ArrayList<>();
     Ship ship;
     private CollidedObjectCallback collisionCallback;
     private AddObjectCallback addCallback;
@@ -27,12 +28,29 @@ public class GameController {
     public GameController(){
         ship = new Ship(AsteroidsApplication.WIDTH / 2, HEIGHT / 2);
 
-        for (int i = 0; i < 8; i++) {
-            Random rnd = new Random();
-            Asteroid asteroid = new Asteroid(rnd.nextInt(WIDTH/3), rnd.nextInt(HEIGHT), PolygonFactory.AsteroidSize.LARGE);
-            asteroids.add(asteroid);
-        }
+        initAsteroid();
+    }
 
+    private void createAsteroid(int amount, PolygonFactory.AsteroidSize size){
+        for (int i = 0; i < amount; i++) {
+            boolean cantAdd = true;
+            while(cantAdd){
+                Random rnd = new Random();
+                Asteroid asteroid = new Asteroid(rnd.nextInt(WIDTH), rnd.nextInt(HEIGHT), size);
+                if(!isEntityClose(asteroid, 100)){
+                    asteroids.add(asteroid);
+                    cantAdd = false;
+                }
+            }
+        }
+    }
+
+    public void initAsteroid(){
+        boolean cantAdd = true;
+
+        createAsteroid(9, PolygonFactory.AsteroidSize.LARGE);
+        createAsteroid(3, PolygonFactory.AsteroidSize.SMALL);
+        createAsteroid(2, PolygonFactory.AsteroidSize.MEDIUM);
     }
 
     private void createParticles(int x, int y){
@@ -80,7 +98,7 @@ public class GameController {
     }
 
     public void moveProjectile(){
-        projectiles.forEach(projectile -> projectile.move());
+        bullets.forEach(bullet -> bullet.move());
     }
 
     public void moveEnemies(){
@@ -91,7 +109,7 @@ public class GameController {
     }
 
     public void moveEnemyProjectile(){
-        enemyProjectiles.forEach(enemyProjectile -> enemyProjectile.move());
+        enemyBullets.forEach(enemyBullet -> enemyBullet.move());
     }
 
     public void addAllProjectiles(){
@@ -105,18 +123,18 @@ public class GameController {
     public void enemyShipCollisions(){
         List<Node> nodesToRemove = new ArrayList<>();
 
-        projectiles.stream()
-                .filter(projectile -> !projectile.isAlive())
-                .forEach(projectile -> nodesToRemove.add(projectile.getNode()));
-        projectiles.removeAll(projectiles.stream()
-                .filter(projectile -> !projectile.isAlive())
+        bullets.stream()
+                .filter(bullet -> !bullet.isAlive())
+                .forEach(bullet -> nodesToRemove.add(bullet.getNode()));
+        bullets.removeAll(bullets.stream()
+                .filter(bullet -> !bullet.isAlive())
                 .collect(Collectors.toList()));
 
-        enemyProjectiles.stream()
-                .filter(enemyProjectile -> !enemyProjectile.isAlive())
-                .forEach(enemyProjectile -> nodesToRemove.add(enemyProjectile.getNode()));
-        enemyProjectiles.removeAll(enemyProjectiles.stream()
-                .filter(enemyProjectile -> !enemyProjectile.isAlive())
+        enemyBullets.stream()
+                .filter(enemyBullet -> !enemyBullet.isAlive())
+                .forEach(enemyBullet -> nodesToRemove.add(enemyBullet.getNode()));
+        enemyBullets.removeAll(enemyBullets.stream()
+                .filter(enemyBullet -> !enemyBullet.isAlive())
                 .collect(Collectors.toList()));
 
         enemyShips.stream()
@@ -130,9 +148,9 @@ public class GameController {
         enemyShips.removeAll(enemyShips.stream()
                 .filter(enemyShip -> !enemyShip.isAlive())
                 .collect(Collectors.toList()));
-        projectiles.forEach(projectile -> {
+        bullets.forEach(bullet -> {
             List<EnemyShip> collisions = enemyShips.stream()
-                    .filter(enemyShip -> enemyShip.collide(projectile))
+                    .filter(enemyShip -> enemyShip.collide(bullet))
                     .collect(Collectors.toList());
 
             collisions.stream().forEach(collided -> {
@@ -150,11 +168,11 @@ public class GameController {
         List<Node> nodesToRemove = new ArrayList<>();
         List<Asteroid> asteroidToAdd = new ArrayList<>();
 
-        projectiles.stream()
-                .filter(projectile -> !projectile.isAlive())
-                .forEach(projectile -> nodesToRemove.add(projectile.getNode()));
-        projectiles.removeAll(projectiles.stream()
-                .filter(projectile -> !projectile.isAlive())
+        bullets.stream()
+                .filter(bullet -> !bullet.isAlive())
+                .forEach(bullet -> nodesToRemove.add(bullet.getNode()));
+        bullets.removeAll(bullets.stream()
+                .filter(bullet -> !bullet.isAlive())
                 .collect(Collectors.toList()));
 
         asteroids.stream()
@@ -178,9 +196,9 @@ public class GameController {
         asteroids.removeAll(asteroids.stream()
                 .filter(asteroid -> !asteroid.isAlive())
                 .collect(Collectors.toList()));
-        projectiles.forEach(projectile -> {
+        bullets.forEach(bullet -> {
             List<Asteroid> collisions = asteroids.stream()
-                    .filter(asteroid -> asteroid.collide(projectile))
+                    .filter(asteroid -> asteroid.collide(bullet))
                     .collect(Collectors.toList());
 
             collisions.stream().forEach(collided -> {
@@ -205,11 +223,31 @@ public class GameController {
         }
     }
 
+    public boolean isEntityClose(Entity entity, int radius){
+        double distance = Math.sqrt(Math.pow(ship.getCharacter().getTranslateX() - entity.getCharacter().getTranslateX(), 2)
+                + Math.pow(ship.getCharacter().getTranslateY() - entity.getCharacter().getTranslateY(), 2));
+        if (distance > radius) {
+            return false;
+        }
+        return true;
+    }
+
     public void addEnemyShipAtRandom(){
         List<Node> nodesToAdd = new ArrayList<>();
         Random rand = new Random();
 
-        EnemyShip enemyShip = new EnemyShip(rand.nextInt(HEIGHT), rand.nextInt(WIDTH));
+        EnemyShip enemyShip = null;
+
+        boolean cantAdd = true;
+
+        while (cantAdd){
+            enemyShip = new EnemyShip(rand.nextInt(HEIGHT), rand.nextInt(WIDTH));
+            if (!isEntityClose(enemyShip, 300)) {
+                cantAdd = false;
+                break;
+            }
+        }
+
         enemyShips.add(enemyShip);
         nodesToAdd.add(enemyShip.getNode());
 
@@ -229,6 +267,7 @@ public class GameController {
 
         if(Math.random() < 0.001) {
             PolygonFactory.AsteroidSize size = asteroidSizes.get(random.nextInt(3));
+            System.out.println(size.name());
             Asteroid asteroid = new Asteroid(WIDTH, HEIGHT, size);
             if(!asteroid.collide(ship)) {
                 asteroids.add(asteroid);
@@ -255,13 +294,13 @@ public class GameController {
 
         enemyShip.setLastShotTime(now);
 
-        EnemyProjectile enemyProjectile = new EnemyProjectile((int) enemyShip.getCharacter().getTranslateX(), (int) enemyShip.getCharacter().getTranslateY());
-        enemyProjectile.getCharacter().setRotate(enemyShip.getCharacter().getRotate());
-        enemyProjectiles.add(enemyProjectile);
-        enemyProjectile.accelerate();
-        enemyProjectile.setMovement(enemyProjectile.getMovement().normalize().multiply(5));
+        EnemyBullet enemyBullet = new EnemyBullet((int) enemyShip.getCharacter().getTranslateX(), (int) enemyShip.getCharacter().getTranslateY());
+        enemyBullet.getCharacter().setRotate(enemyShip.getCharacter().getRotate());
+        enemyBullets.add(enemyBullet);
+        enemyBullet.accelerate();
+        enemyBullet.setMovement(enemyBullet.getMovement().normalize().multiply(5));
 
-        nodesToAdd.add(enemyProjectile.getNode());
+        nodesToAdd.add(enemyBullet.getNode());
 
         if(addCallback != null){
             addCallback.onAddObjects(nodesToAdd);
@@ -271,21 +310,21 @@ public class GameController {
     public void shootProjectile(){
         List<Node> nodesToAdd = new ArrayList<>();
 
-        Projectile projectile = new Projectile((int) ship.getCharacter().getTranslateX(), (int) ship.getCharacter().getTranslateY());
-        projectile.getCharacter().setRotate(ship.getCharacter().getRotate());
-        projectiles.add(projectile);
+        Bullet bullet = new Bullet((int) ship.getCharacter().getTranslateX(), (int) ship.getCharacter().getTranslateY());
+        bullet.getCharacter().setRotate(ship.getCharacter().getRotate());
+        bullets.add(bullet);
 
-        projectile.accelerate();
-        projectile.setMovement(projectile.getMovement().normalize().multiply(5));
+        bullet.accelerate();
+        bullet.setMovement(bullet.getMovement().normalize().multiply(5));
 
-        nodesToAdd.add(projectile.getNode());
+        nodesToAdd.add(bullet.getNode());
         if(addCallback != null){
             addCallback.onAddObjects(nodesToAdd);
         }
     }
 
     public int getProjectileSize(){
-        return projectiles.size();
+        return bullets.size();
     }
 
     public boolean gameOver(){
@@ -301,8 +340,8 @@ public class GameController {
                 gameOver.set(true);
             }
         });
-        enemyProjectiles.forEach(enemyProjectile -> {
-            if (ship.collide(enemyProjectile)) {
+        enemyBullets.forEach(enemyBullet -> {
+            if (ship.collide(enemyBullet)) {
                 gameOver.set(true);
             }
         });
@@ -312,18 +351,18 @@ public class GameController {
 
     public int calculateScore(){
         AtomicInteger score = new AtomicInteger();
-        projectiles.forEach(projectile -> {
+        bullets.forEach(bullet -> {
             asteroids.forEach(asteroid -> {
-                if(projectile.collide(asteroid)) {
-                    projectile.setAlive(false);
+                if(bullet.collide(asteroid)) {
+                    bullet.setAlive(false);
                     asteroid.setAlive(false);
                     score.addAndGet(asteroid.getSize().getScoreValue());
                 }
             });
             enemyShips.forEach(enemyShip -> {
                 final int ENEMY_SCORE = 500;
-                if (projectile.collide(enemyShip)) {
-                    projectile.setAlive(false);
+                if (bullet.collide(enemyShip)) {
+                    bullet.setAlive(false);
                     enemyShip.setAlive(false);
                     score.addAndGet(ENEMY_SCORE);
                 }
@@ -336,9 +375,9 @@ public class GameController {
     public void removeProjectiles(){
         List<Node> nodesToRemove = new ArrayList<>();
 
-        List<Projectile> projectilesToRemove = projectiles.stream().filter(projectile -> {
+        List<Bullet> projectilesToRemove = bullets.stream().filter(bullet -> {
             List<Asteroid> collisions = asteroids.stream()
-                    .filter(asteroid -> asteroid.collide(projectile))
+                    .filter(asteroid -> asteroid.collide(bullet))
                     .collect(Collectors.toList());
 
             if(collisions.isEmpty()) {
@@ -353,8 +392,8 @@ public class GameController {
             return true;
         }).collect(Collectors.toList());
 
-        projectilesToRemove.forEach(projectile -> {
-            projectiles.remove(projectile);
+        projectilesToRemove.forEach(bullet -> {
+            bullets.remove(bullet);
         });
 
         if (collisionCallback != null) {

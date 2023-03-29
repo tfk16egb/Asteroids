@@ -1,11 +1,8 @@
 package Model;
 
-import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Shape;
 
-public class Ship extends Character {
+public class Ship extends Entity {
 
     public Ship(int x, int y) {
         super(new Polygon(-10, -10, 20, 0, -10, 10), x, y);

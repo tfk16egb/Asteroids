@@ -4,9 +4,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
-import java.util.Random;
-
-public class Particle extends Character{
+public class Particle extends Entity {
 
     private boolean isAlive;
     private int lifetime;

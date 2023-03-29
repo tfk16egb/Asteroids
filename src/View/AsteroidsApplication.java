@@ -24,7 +24,7 @@ public class AsteroidsApplication extends Application {
 
 
         MenuScene menuScene = new MenuScene(stage, bImgConverter);
-        stage.setTitle("Asteroids!");
+        stage.setTitle("Asteroid Shooter");
         stage.setScene(menuScene.getScene());
         stage.setResizable(false);
         stage.show();
