@@ -11,15 +11,15 @@ https://java-programming.mooc.fi/part-14/3-larger-application-asteroids
 - [X] Asteroidernas rörelseriktning ska vara slumpmässig
 - [X] Rymdskeppet kan skjuta asteroider och andra hinder
 - [X] När ett skott träffar en asteroid försvinner den från skärmen
-- [ ] Det ska finnas ett fiendeskepp som kan skjuta mot rymdskeppet. Fiendeskeppet
+- [X] Det ska finnas ett fiendeskepp som kan skjuta mot rymdskeppet. Fiendeskeppet
       dyker upp med jämna mellanrum, t ex var tionde sekund.
 - [X] Rymdskeppet kan röra sig över hela skärmen. Om rymdskeppet går utanför skärmen
       dyker den upp på andra sidan av skärmen.
 - [X] Rymdskeppet ska kunna accelerera och svänga
 - [X] När rymdskeppet träffas av en asteroid, avslutas spelet
-- [ ] När rymdskeppet träffas av en projektil, avslutas spelet
+- [X] När rymdskeppet träffas av en projektil, avslutas spelet
 - [X] Formatera om koden enligt MVC
-- [ ] Dela in koden i olika Design-patterns
+- [X] Dela in koden i olika Design-patterns
   - [X] Factory Method
   - [X] Observable
 
